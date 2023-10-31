@@ -1,0 +1,160 @@
+{
+  "type": "object",
+  "properties": {
+    "FormOpenInApprovalContext": {
+      "type": "boolean",
+      "title": "FormOpenInApprovalContext",
+      "description": "FormOpenInApprovalContext"
+    },
+    "trackingCodeApprovalCopy": {
+      "type": "string",
+      "title": "Digital reference code",
+      "description": "trackingCodeApprovalCopy"
+    },
+    "PersonResponsibleName": {
+      "type": "string",
+      "title": "Person responsible name",
+      "description": "PersonResponsibleName"
+    },
+    "IsInspectorFillingRom": {
+      "type": "string",
+      "title": "Are you a biosecurity certifier filling (the) record of movement form out on behalf of the person responsible?",
+      "description": "IsInspectorFillingRom"
+    },
+    "InspectorFillingRom": {
+      "type": "string",
+      "title": "Biosecurity certifier filling record of movement",
+      "description": "InspectorFillingRom"
+    },
+    "Carriers": {
+      "type": "array",
+      "title": "Carriers",
+      "description": "Carriers[]",
+      "items": {
+        "type": "object",
+        "title": "Carriers (Entry)",
+        "properties": {
+          "CarrierType": {
+            "type": "string",
+            "title": "Carrier type",
+            "description": "Carriers[].CarrierType"
+          },
+          "CarrierMake": {
+            "type": "string",
+            "title": "Make",
+            "description": "Carriers[].CarrierMake"
+          },
+          "CarrierModel": {
+            "type": "string",
+            "title": "Model",
+            "description": "Carriers[].CarrierModel"
+          },
+          "CarrierSerialNumber": {
+            "type": "string",
+            "title": "Serial number",
+            "description": "Carriers[].CarrierSerialNumber"
+          },
+          "SerialNumberPlatePhotoBy": {
+            "type": "string",
+            "title": "Provide serial number plate photo by",
+            "description": "Carriers[].SerialNumberPlatePhotoBy"
+          },
+          "SerialNumberPlatePhotoViaCamera": {
+            "type": "object",
+            "title": "Serial number plate photo via camera",
+            "required": [],
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": ": Attachment ID",
+                "description": "Carriers[].SerialNumberPlatePhotoViaCamera.id"
+              },
+              "fileName": {
+                "type": "string",
+                "title": ": File Name",
+                "description": "Carriers[].SerialNumberPlatePhotoViaCamera.fileName"
+              },
+              "contentType": {
+                "type": "string",
+                "title": ": File Content Type",
+                "description": "Carriers[].SerialNumberPlatePhotoViaCamera.contentType"
+              }
+            }
+          },
+          "SerialNumberPlatePhotoViaFileUpload": {
+            "type": "array",
+            "title": "Serial number plate photo via file upload : Attachments",
+            "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[]",
+            "items": {
+              "type": "object",
+              "title": "Serial number plate photo via file upload",
+              "required": [],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": ": Attachment ID",
+                  "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[].id"
+                },
+                "fileName": {
+                  "type": "string",
+                  "title": ": File Name",
+                  "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[].fileName"
+                },
+                "contentType": {
+                  "type": "string",
+                  "title": ": File Content Type",
+                  "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[].contentType"
+                }
+              }
+            }
+          },
+          "CarrierRegistrationNumber": {
+            "type": "string",
+            "title": "Registration number",
+            "description": "Carriers[].CarrierRegistrationNumber"
+          }
+        },
+        "required": []
+      }
+    },
+    "InspectionFacility": {
+      "type": "string",
+      "title": "Inspection facility",
+      "description": "InspectionFacility"
+    },
+    "InspectionResult": {
+      "type": "string",
+      "title": "Inspection result",
+      "description": "InspectionResult"
+    },
+    "InspectionDate": {
+      "type": "string",
+      "format": "date",
+      "title": "Inspection date",
+      "description": "InspectionDate"
+    },
+    "CertificateInForceForDays": {
+      "type": "number",
+      "title": "Certificate in force for days",
+      "description": "CertificateInForceForDays",
+      "default": 1
+    },
+    "PaperCertificateNumber": {
+      "type": "string",
+      "title": "Paper certificate number",
+      "description": "PaperCertificateNumber",
+      "default": "P"
+    },
+    "PersonResponsibleEmail": {
+      "type": "string",
+      "title": "Person responsible email",
+      "description": "PersonResponsibleEmail"
+    },
+    "InspectionOfficerNotes": {
+      "type": "string",
+      "title": "Inspection officer notes",
+      "description": "InspectionOfficerNotes"
+    }
+  },
+  "required": []
+}

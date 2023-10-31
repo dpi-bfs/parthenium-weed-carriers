@@ -1,0 +1,75 @@
+{
+  "server": {
+    "project": "nswfoodauthority-foodhandler.api.oneblink.io",
+    "cors": true,
+    "network": {
+      "dev": {
+        "vpcSubnets": [
+          "subnet-12345678",
+          "subnet-99999999"
+        ],
+        "vpcSecurityGroups": [
+          "sg-99999999999999999"
+        ]
+      },
+      "test": {
+        "vpcSubnets": [
+          "subnet-12345678",
+          "subnet-99999999"
+        ],
+        "vpcSecurityGroups": [
+          "sg-99999999999999999"
+        ]
+      },
+      "train": {
+        "vpcSubnets": [
+          "subnet-12345678",
+          "subnet-99999999"
+        ],
+        "vpcSecurityGroups": [
+          "sg-99999999999999999"
+        ]
+      },
+      "prod": {
+        "vpcSubnets": [
+          "subnet-12345678",
+          "subnet-99999999"
+        ],
+        "vpcSecurityGroups": [
+          "sg-99999999999999999"
+        ]
+      }
+    },    
+    "routes": [
+      {
+        "route": "/form-webhook",
+        "module": "./output/formWebhook.js"
+      } 
+    ],
+    "variables": {
+      "SENDER_EMAIL_ADDRESS": "food.contact@dpi.nsw.gov.au",
+      "WEB_HOOK_SECRET": "SomeSecret",
+      "FORMS_ACCESS_KEY": "SomeKey",
+      "FORMS_SECRET_KEY": "SomeSecret",
+      "PDF_ACCESS_KEY": "SomeKey",
+      "PDF_SECRET_KEY": "SomeSecret",
+      "MAILGUN_DOMAIN": "bfs.dpi.nsw.gov.au",
+      "MAILGUN_USERNAME": "SomeUserName",
+      "MAILGUN_API_SECRET_KEY": "SomeSecret",
+      "POWER_AUTOMATE_SECRET_KEY": "SomeSecret",
+      "POWER_AUTOMATE_HTTP_POST_URL": {
+        "local": "",
+        "dev": "theUrlFromFirstComponentInFlow-FoodHandlerBasicsCertificateNONPROD",
+        "test": "",
+        "train": "",
+        "prod": "theUrlFromFirstComponentInFlow-FoodHandlerBasicsCertificatePROD""
+      },
+      "ONEBLINK_ENVIRONMENT": {
+        "local": "local",
+        "dev": "dev",
+        "test": "test",
+        "prod": "prod"
+      }
+    }
+  }
+}

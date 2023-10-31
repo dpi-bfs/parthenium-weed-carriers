@@ -1,0 +1,790 @@
+{
+  "type": "object",
+  "properties": {
+    "BaseFormSubmissionId": {
+      "type": "string",
+      "title": "BaseFormSubmissionId",
+      "description": "BaseFormSubmissionId"
+    },    
+    "trackingCode": {
+      "type": "string",
+      "title": "Digital reference code",
+      "description": "trackingCode"
+    },
+    "env": {
+      "type": "string",
+      "title": "env",
+      "description": "env",
+      "default": "ENV"
+    },
+    "IsInspectorFillingRom": {
+      "type": "string",
+      "title": "Are you a biosecurity certifier filling this record of movement form out on behalf of the person responsible?",
+      "description": "IsInspectorFillingRom",
+      "default": "2d53a111-22ff-486c-84c9-1a9144639108"
+    },
+    "InspectorFillingRom": {
+      "type": "string",
+      "title": "Biosecurity certifier filling record of movement",
+      "description": "InspectorFillingRom"
+    },
+    "PersonResponsibleFirstName": {
+      "type": "string",
+      "title": "First name",
+      "description": "PersonResponsibleFirstName"
+    },
+    "PersonResponsibleLastName": {
+      "type": "string",
+      "title": "Last name",
+      "description": "PersonResponsibleLastName"
+    },
+    "PersonResponsibleEmail": {
+      "type": "string",
+      "title": "Email",
+      "description": "PersonResponsibleEmail"
+    },
+    "PersonResponsibleCanAccessEmailOnTheRoad": {
+      "type": "string",
+      "title": "Can you readily access your email from a mobile device, while on the road?",
+      "description": "PersonResponsibleCanAccessEmailOnTheRoad"
+    },
+    "PersonResponsibleMobilePhone": {
+      "type": "string",
+      "title": "Mobile phone",
+      "description": "PersonResponsibleMobilePhone"
+    },
+    "PersonResponsibleAlternatePhone": {
+      "type": "string",
+      "title": "Alternate phone",
+      "description": "PersonResponsibleAlternatePhone"
+    },
+    "InspectionFacilityIntended": {
+      "type": "string",
+      "title": "Inspection facility intended",
+      "description": "InspectionFacilityIntended"
+    },
+    "InspectionFacility": {
+      "type": "string",
+      "title": "Inspection facility",
+      "description": "InspectionFacility"
+    },    
+    "Owner": {
+      "type": "string",
+      "title": "Owner",
+      "description": "Owner"
+    },
+    "OwnerFirstName": {
+      "type": "string",
+      "title": "First name",
+      "description": "OwnerFirstName"
+    },
+    "OwnerLastName": {
+      "type": "string",
+      "title": "Last name",
+      "description": "OwnerLastName"
+    },
+    "OwnerEmail": {
+      "type": "string",
+      "title": "Email",
+      "description": "OwnerEmail"
+    },
+    "OwnerPhone": {
+      "type": "string",
+      "title": "Phone",
+      "description": "OwnerPhone"
+    },
+    "Carriers": {
+      "type": "array",
+      "title": "Carriers",
+      "description": "Carriers[]",
+      "items": {
+        "type": "object",
+        "title": "Carriers (Entry)",
+        "properties": {
+          "CarrierType": {
+            "type": "string",
+            "title": "Carrier type",
+            "description": "Carriers[].CarrierType"
+          },
+          "CarrierMake": {
+            "type": "string",
+            "title": "Make",
+            "description": "Carriers[].CarrierMake"
+          },
+          "CarrierModel": {
+            "type": "string",
+            "title": "Model",
+            "description": "Carriers[].CarrierModel"
+          },
+          "CarrierSerialNumber": {
+            "type": "string",
+            "title": "Serial number",
+            "description": "Carriers[].CarrierSerialNumber"
+          },
+          "SerialNumberPlatePhotoBy": {
+            "type": "string",
+            "title": "Provide serial number plate photo by",
+            "description": "Carriers[].SerialNumberPlatePhotoBy"
+          },
+          "SerialNumberPlatePhotoViaCamera": {
+            "type": "object",
+            "title": "Serial number plate photo via camera",
+            "required": [],
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": ": Attachment ID",
+                "description": "Carriers[].SerialNumberPlatePhotoViaCamera.id"
+              },
+              "fileName": {
+                "type": "string",
+                "title": ": File Name",
+                "description": "Carriers[].SerialNumberPlatePhotoViaCamera.fileName"
+              },
+              "contentType": {
+                "type": "string",
+                "title": ": File Content Type",
+                "description": "Carriers[].SerialNumberPlatePhotoViaCamera.contentType"
+              }
+            }
+          },
+          "SerialNumberPlatePhotoViaFileUpload": {
+            "type": "array",
+            "title": "Serial number plate photo via file upload : Attachments",
+            "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[]",
+            "items": {
+              "type": "object",
+              "title": "Serial number plate photo via file upload",
+              "required": [],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "title": ": Attachment ID",
+                  "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[].id"
+                },
+                "fileName": {
+                  "type": "string",
+                  "title": ": File Name",
+                  "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[].fileName"
+                },
+                "contentType": {
+                  "type": "string",
+                  "title": ": File Content Type",
+                  "description": "Carriers[].SerialNumberPlatePhotoViaFileUpload[].contentType"
+                }
+              }
+            }
+          },
+          "CarrierRegistrationNumber": {
+            "type": "string",
+            "title": "Registration number",
+            "description": "Carriers[].CarrierRegistrationNumber"
+          }
+        },
+        "required": []
+      }
+    },
+    "OriginAddressNswPoint": {
+      "type": "object",
+      "title": "Address",
+      "description": "OriginAddressNswPoint",
+      "properties": {
+        "dataset": {
+          "type": "string"
+        },
+        "geo": {
+          "type": "object",
+          "title": "Geo",
+          "properties": {
+            "geoDatumCode": {
+              "type": "string"
+            },
+            "geoFeature": {
+              "type": "string"
+            },
+            "geometry": {
+              "type": "object",
+              "properties": {
+                "coordinates": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "addressDetails": {
+          "type": "object",
+          "title": " : Address Details",
+          "description": "OriginAddressNswPoint.addressDetails",
+          "properties": {
+            "cadastralIdentifier": {
+              "type": "string"
+            },
+            "formattedAddress": {
+              "type": "string",
+              "title": " : Formatted Address",
+              "description": "OriginAddressNswPoint.addressDetails.formattedAddress"
+            },
+            "localityName": {
+              "type": "string"
+            },
+            "postcode": {
+              "type": "string"
+            },
+            "stateTerritory": {
+              "type": "string"
+            },
+            "streetName": {
+              "type": "string"
+            },
+            "streetNumber1": {
+              "type": "string"
+            },
+            "streetNumber2": {
+              "type": "string"
+            },
+            "streetType": {
+              "type": "string"
+            },
+            "streetTypeDescription": {
+              "type": "string"
+            },
+            "lotIdentifier": {
+              "type": "string"
+            },
+            "localityNeighbours": {
+              "type": "string"
+            },
+            "gnafLocalityPid": {
+              "type": "string"
+            },
+            "gnafStreetLocalityPid": {
+              "type": "string"
+            },
+            "aliasPrincipal": {
+              "type": "string"
+            },
+            "deliveryPointIdentifier": {
+              "type": "string"
+            }
+          }
+        },
+        "addressId": {
+          "type": "string"
+        },
+        "addressRecordType": {
+          "type": "string"
+        },
+        "asgsMain": {
+          "type": "object",
+          "title": " : ASGS Main",
+          "description": "OriginAddressNswPoint.asgsMain",
+          "properties": {
+            "2011": {
+              "type": "object",
+              "properties": {
+                "mbId": {
+                  "type": "string"
+                },
+                "sa1Id": {
+                  "type": "string"
+                },
+                "sa2Id": {
+                  "type": "string"
+                },
+                "sa2Name": {
+                  "type": "string"
+                },
+                "sa3Id": {
+                  "type": "string"
+                },
+                "sa3Name": {
+                  "type": "string"
+                },
+                "sa4Id": {
+                  "type": "string"
+                },
+                "sa4Name": {
+                  "type": "string"
+                }
+              }
+            },
+            "2016": {
+              "type": "object",
+              "properties": {
+                "mbId": {
+                  "type": "string"
+                },
+                "sa1Id": {
+                  "type": "string"
+                },
+                "sa2Id": {
+                  "type": "string"
+                },
+                "sa2Name": {
+                  "type": "string"
+                },
+                "sa3Id": {
+                  "type": "string"
+                },
+                "sa3Name": {
+                  "type": "string"
+                },
+                "sa4Id": {
+                  "type": "string"
+                },
+                "sa4Name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "commonwealthElectorate": {
+          "type": "object",
+          "title": " : Commonwealth Electorate",
+          "description": "OriginAddressNswPoint.commonwealthElectorate",
+          "properties": {
+            "commElectoralName": {
+              "type": "string"
+            },
+            "commElectoralPid": {
+              "type": "string"
+            }
+          }
+        },
+        "localGovernmentArea": {
+          "type": "object",
+          "title": " : Local Government Area",
+          "description": "OriginAddressNswPoint.localGovernmentArea",
+          "properties": {
+            "lgaName": {
+              "type": "string"
+            },
+            "lgaPid": {
+              "type": "string"
+            },
+            "lgaShortName": {
+              "type": "string"
+            }
+          }
+        },
+        "stateElectorate": {
+          "type": "array",
+          "title": " : State Electorate",
+          "description": "OriginAddressNswPoint.stateElectorate",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stateElectoralName": {
+                "type": "string"
+              },
+              "stateElectoralType": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cadastralParcels": {
+          "type": "array",
+          "title": " : Cadastral Parcels",
+          "description": "OriginAddressNswPoint.cadastralParcels",
+          "items": {
+            "type": "object",
+            "properties": {
+              "propId": {
+                "type": "string"
+              },
+              "parcelId": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "addressId",
+        "addressRecordType"
+      ]
+    },
+    "OriginCannotFindAddressBySearch": {
+      "type": "boolean",
+      "title": "I cannot find my address by search",
+      "description": "OriginCannotFindAddressBySearch"
+    },
+    "OriginManualStreetAddress": {
+      "type": "string",
+      "title": "Street address",
+      "description": "OriginManualStreetAddress"
+    },
+    "OriginManualSuburb": {
+      "type": "string",
+      "title": "Suburb",
+      "description": "OriginManualSuburb"
+    },
+    "OriginManualState": {
+      "type": "string",
+      "title": "State",
+      "description": "OriginManualState",
+      "default": "7fc476a4-4ded-4d51-b280-3f608acac03d"
+    },
+    "OriginManualPostcode": {
+      "type": "number",
+      "title": "Postcode",
+      "description": "OriginManualPostcode"
+    },
+    "AreDestinationsKnown": {
+      "type": "string",
+      "title": "Do you know the destinations in NSW where the carriers will next work?",
+      "description": "AreDestinationsKnown"
+    },
+    "Destinations": {
+      "type": "array",
+      "title": "Destinations",
+      "description": "Destinations[]",
+      "items": {
+        "type": "object",
+        "title": "Destinations (Entry)",
+        "properties": {
+          "DestinationAddressNswPoint": {
+            "type": "object",
+            "title": "Address",
+            "description": "Destinations[].DestinationAddressNswPoint",
+            "properties": {
+              "dataset": {
+                "type": "string"
+              },
+              "geo": {
+                "type": "object",
+                "title": "Geo",
+                "properties": {
+                  "geoDatumCode": {
+                    "type": "string"
+                  },
+                  "geoFeature": {
+                    "type": "string"
+                  },
+                  "geometry": {
+                    "type": "object",
+                    "properties": {
+                      "coordinates": {
+                        "type": "array",
+                        "items": {
+                          "type": "number"
+                        }
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "addressDetails": {
+                "type": "object",
+                "title": " : Address Details",
+                "description": "Destinations[].DestinationAddressNswPoint.addressDetails",
+                "properties": {
+                  "cadastralIdentifier": {
+                    "type": "string"
+                  },
+                  "formattedAddress": {
+                    "type": "string",
+                    "title": " : Formatted Address",
+                    "description": "Destinations[].DestinationAddressNswPoint.addressDetails.formattedAddress"
+                  },
+                  "localityName": {
+                    "type": "string"
+                  },
+                  "postcode": {
+                    "type": "string"
+                  },
+                  "stateTerritory": {
+                    "type": "string"
+                  },
+                  "streetName": {
+                    "type": "string"
+                  },
+                  "streetNumber1": {
+                    "type": "string"
+                  },
+                  "streetNumber2": {
+                    "type": "string"
+                  },
+                  "streetType": {
+                    "type": "string"
+                  },
+                  "streetTypeDescription": {
+                    "type": "string"
+                  },
+                  "lotIdentifier": {
+                    "type": "string"
+                  },
+                  "localityNeighbours": {
+                    "type": "string"
+                  },
+                  "gnafLocalityPid": {
+                    "type": "string"
+                  },
+                  "gnafStreetLocalityPid": {
+                    "type": "string"
+                  },
+                  "aliasPrincipal": {
+                    "type": "string"
+                  },
+                  "deliveryPointIdentifier": {
+                    "type": "string"
+                  }
+                }
+              },
+              "addressId": {
+                "type": "string"
+              },
+              "addressRecordType": {
+                "type": "string"
+              },
+              "asgsMain": {
+                "type": "object",
+                "title": " : ASGS Main",
+                "description": "Destinations[].DestinationAddressNswPoint.asgsMain",
+                "properties": {
+                  "2011": {
+                    "type": "object",
+                    "properties": {
+                      "mbId": {
+                        "type": "string"
+                      },
+                      "sa1Id": {
+                        "type": "string"
+                      },
+                      "sa2Id": {
+                        "type": "string"
+                      },
+                      "sa2Name": {
+                        "type": "string"
+                      },
+                      "sa3Id": {
+                        "type": "string"
+                      },
+                      "sa3Name": {
+                        "type": "string"
+                      },
+                      "sa4Id": {
+                        "type": "string"
+                      },
+                      "sa4Name": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "2016": {
+                    "type": "object",
+                    "properties": {
+                      "mbId": {
+                        "type": "string"
+                      },
+                      "sa1Id": {
+                        "type": "string"
+                      },
+                      "sa2Id": {
+                        "type": "string"
+                      },
+                      "sa2Name": {
+                        "type": "string"
+                      },
+                      "sa3Id": {
+                        "type": "string"
+                      },
+                      "sa3Name": {
+                        "type": "string"
+                      },
+                      "sa4Id": {
+                        "type": "string"
+                      },
+                      "sa4Name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "commonwealthElectorate": {
+                "type": "object",
+                "title": " : Commonwealth Electorate",
+                "description": "Destinations[].DestinationAddressNswPoint.commonwealthElectorate",
+                "properties": {
+                  "commElectoralName": {
+                    "type": "string"
+                  },
+                  "commElectoralPid": {
+                    "type": "string"
+                  }
+                }
+              },
+              "localGovernmentArea": {
+                "type": "object",
+                "title": " : Local Government Area",
+                "description": "Destinations[].DestinationAddressNswPoint.localGovernmentArea",
+                "properties": {
+                  "lgaName": {
+                    "type": "string"
+                  },
+                  "lgaPid": {
+                    "type": "string"
+                  },
+                  "lgaShortName": {
+                    "type": "string"
+                  }
+                }
+              },
+              "stateElectorate": {
+                "type": "array",
+                "title": " : State Electorate",
+                "description": "Destinations[].DestinationAddressNswPoint.stateElectorate",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "stateElectoralName": {
+                      "type": "string"
+                    },
+                    "stateElectoralType": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "cadastralParcels": {
+                "type": "array",
+                "title": " : Cadastral Parcels",
+                "description": "Destinations[].DestinationAddressNswPoint.cadastralParcels",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "propId": {
+                      "type": "string"
+                    },
+                    "parcelId": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "addressId",
+              "addressRecordType"
+            ]
+          },
+          "DestinationCannotFindAddressBySearch": {
+            "type": "boolean",
+            "title": "I cannot find my address by search",
+            "description": "Destinations[].DestinationCannotFindAddressBySearch"
+          },
+          "DestinationManualStreetAddress": {
+            "type": "string",
+            "title": "Street address",
+            "description": "Destinations[].DestinationManualStreetAddress"
+          },
+          "DestinationManualSuburb": {
+            "type": "string",
+            "title": "Suburb",
+            "description": "Destinations[].DestinationManualSuburb"
+          },
+          "DestinationManualState": {
+            "type": "string",
+            "title": "State",
+            "description": "Destinations[].DestinationManualState",
+            "default": "37cd6ce6-d79f-4c1b-9b26-8018e1b2c9b3"
+          },
+          "DestinationManualPostcode": {
+            "type": "number",
+            "title": "Postcode",
+            "description": "Destinations[].DestinationManualPostcode"
+          }
+        },
+        "required": []
+      }
+    },
+    "RomUserNotes": {
+      "type": "string",
+      "title": "Notes",
+      "description": "RomUserNotes"
+    },
+    "IDeclareThat": {
+      "type": "array",
+      "title": "I declare that",
+      "description": "IDeclareThat[]",
+      "items": {
+        "type": "string",
+        "title": "I declare that (Option)",
+        "description": "IDeclareThat[].option"
+      }
+    }
+  },
+  "InspectionFacility": {
+    "type": "string",
+    "title": "Inspection facility",
+    "description": "InspectionFacility"
+  },
+  "ApprovalFormSubmissionId": {
+    "type": "string",
+    "title": "ApprovalFormSubmissionId",
+    "description": "ApprovalFormSubmissionId"
+  },
+  "InspectionResult": {
+    "type": "string",
+    "title": "Inspection result",
+    "description": "InspectionResult"
+  },
+  "InspectionDate": {
+    "type": "string",
+    "format": "date",
+    "title": "Inspection date",
+    "description": "InspectionDate"
+  },
+  "CertificateInForceForDays": {
+    "type": "number",
+    "title": "Certificate in force for days",
+    "description": "CertificateInForceForDays",
+    "default": 1
+  },
+  "PaperCertificateNumber": {
+    "type": "string",
+    "title": "Paper certificate number",
+    "description": "PaperCertificateNumber",
+    "default": "P"
+  },  
+  "InspectionOfficerNotes": {
+    "type": "string",
+    "title": "Inspection officer notes",
+    "description": "InspectionOfficerNotes"
+  },  
+  "InspectorName": {
+    "type": "string",
+    "title": "Inspector name",
+    "description": "InspectorName"
+  },
+  "InspectorEmail": {
+    "type": "string",
+    "title": "Inspector name",
+    "description": "InspectorEmail"
+  },
+  "ApprovalFlowUpdatedAt": {
+    "type": "Date",
+    "title": "ApprovalFlowUpdatedAt",
+    "description": "ApprovalFlowUpdatedAt"   
+  },
+  "required": []
+}

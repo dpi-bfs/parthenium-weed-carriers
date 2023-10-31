@@ -1,0 +1,60 @@
+{
+  "name": "parthenium-weed-carriers",
+  "description": "A user submits a Parthenium Weed Carrier Record of Movement (ROM). An inspector approves the ROM, after verifying carriers are clean. After approval this code generates a PDF Biosecurity Certificate. The certificate is emailed to the user and a record of the transaction is pushed to the Parthenium Weed Carrier Max Database via a Power Automate flow.",
+  "license": "ISC",
+  "type": "module",
+  "main": "./out/base-form-approval-event.js",
+  "config": {
+    "externalLibraryPath": "../../../Typescript/library/",
+    "externalLibraryFileList": "dateTime.* mailgunWrapper.* maths.* oneblinkSdkHelpers.* sendPostRequest.* stringTools.* "
+  },
+  "scripts": {
+    "print": "echo %npm_package_config_externalLibraryPath%",
+    "watch-typescript": "npx tsc --watch",
+    "mirror-library-files": "robocopy %npm_package_config_externalLibraryPath% src/lib %npm_package_config_externalLibraryFileList% /MIR /lev:1",
+    "watch-library-files": "chokidar %npm_package_config_externalLibraryPath%*.{ts,mts} -c \"npm run mirror-library-files\" --initial",
+    "copy-assets": "copyfiles -u 1 src/templates/*.mustache out",
+    "watch-assets": "chokidar \"src/templates/**/*\" -c \"npm run copy-assets\" --initial",
+    "clean": "rimraf out",
+    "watch": "npm-run-all clean --parallel watch-assets watch-library-files watch-typescript",
+    "local-serve": "npx oneblink api serve --env dev;Get-Date",
+    "debug": "npm-run-all --serial watch-typescript local-serve"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@oneblink/sdk": "^4.1.0",
+    "abort-controller": "^3.0.0",
+    "axios": "^1.5.1",
+    "crypto": "^1.0.1",
+    "form-data": "^4.0.0",
+    "juice": "^9.1.0",
+    "mailgun.js": "^9.3.0",
+    "moment-timezone": "^0.5.43",
+    "mustache": "^4.2.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@oneblink/cli": "^3.3.0",
+    "@oneblink/types": "github:oneblink/types",
+    "@types/mustache": "^4.2.4",
+    "@types/uuid": "^9.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "chokidar-cli": "^3.0.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "npm-check-updates": "^16.14.6",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=12",
+    "npm": ">=6"
+  }
+}
