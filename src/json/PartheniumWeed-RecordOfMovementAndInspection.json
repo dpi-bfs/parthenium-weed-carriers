@@ -5,7 +5,7 @@
       "type": "string",
       "title": "BaseFormSubmissionId",
       "description": "BaseFormSubmissionId"
-    },    
+    },
     "trackingCode": {
       "type": "string",
       "title": "Digital reference code",
@@ -55,7 +55,7 @@
       "type": "string",
       "title": "Inspection facility intended",
       "description": "InspectionFacilityIntended"
-    },  
+    },
     "Owner": {
       "type": "string",
       "title": "Owner",
@@ -752,12 +752,12 @@
       "title": "Paper certificate number",
       "description": "PaperCertificateNumber",
       "default": "P"
-    },  
+    },
     "InspectionOfficerNotes": {
       "type": "string",
       "title": "Inspection officer notes",
       "description": "InspectionOfficerNotes"
-    },  
+    },
     "InspectorName": {
       "type": "string",
       "title": "Inspector name",
@@ -769,25 +769,25 @@
       "description": "InspectorEmail"
     },
     "ApprovalFlowUpdatedAt": {
-      "type": "Date",
+      "type": "string",
       "title": "ApprovalFlowUpdatedAt",
-      "description": "ApprovalFlowUpdatedAt"   
+      "description": "ApprovalFlowUpdatedAt"
     },
     "EnvPrefix": {
       "type": "string",
       "title": "EnvPrefix",
       "description": "EnvPrefix"
-    },  
+    },
     "PowerAutomateSecretKey": {
       "type": "string",
       "title": "PowerAutomateSecretKey",
       "description": "PowerAutomateSecretKey"
-    },  
+    },
     "BiosecurityCertificatePdf": {
       "type": "string",
       "title": "BiosecurityCertificatePdf",
       "description": "BiosecurityCertificatePdf"
-    },  
-    "required": []
-  }
+    }
+  },
+  "required": []
 }
