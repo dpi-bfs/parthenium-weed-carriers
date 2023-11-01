@@ -9,7 +9,7 @@ const pdfSDK = new OneBlink.PDF({
   secretKey: process.env.PDF_SECRET_KEY!,
 });
 
-export async function sendMail(certificateFields: CertificateFields, businessEmail: string){
+export async function sendMail(certificateFields: CertificateFields, businessEmail: string): Promise<string>{
 
   const SENDER_EMAIL_ADDRESS = process.env.SENDER_EMAIL_ADDRESS;
 
@@ -73,4 +73,5 @@ export async function sendMail(certificateFields: CertificateFields, businessEma
   await MailGun.sendEmail(emailBusinessProps, oneblinkEnvironment, source, mailgunOptions);
   console.log("Sent business email via MailGun")
 
+  return pdf.toString('base64')
 }

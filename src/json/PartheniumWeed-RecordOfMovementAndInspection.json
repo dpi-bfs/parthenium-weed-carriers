@@ -11,17 +11,10 @@
       "title": "Digital reference code",
       "description": "trackingCode"
     },
-    "env": {
-      "type": "string",
-      "title": "env",
-      "description": "env",
-      "default": "ENV"
-    },
     "IsInspectorFillingRom": {
       "type": "string",
       "title": "Are you a biosecurity certifier filling this record of movement form out on behalf of the person responsible?",
-      "description": "IsInspectorFillingRom",
-      "default": "2d53a111-22ff-486c-84c9-1a9144639108"
+      "description": "IsInspectorFillingRom"
     },
     "InspectorFillingRom": {
       "type": "string",
@@ -62,12 +55,7 @@
       "type": "string",
       "title": "Inspection facility intended",
       "description": "InspectionFacilityIntended"
-    },
-    "InspectionFacility": {
-      "type": "string",
-      "title": "Inspection facility",
-      "description": "InspectionFacility"
-    },    
+    },  
     "Owner": {
       "type": "string",
       "title": "Owner",
@@ -424,7 +412,7 @@
     "OriginManualStreetAddress": {
       "type": "string",
       "title": "Street address",
-      "description": "OriginManualStreetAddress"
+      "description": " "
     },
     "OriginManualSuburb": {
       "type": "string",
@@ -731,60 +719,75 @@
         "title": "I declare that (Option)",
         "description": "IDeclareThat[].option"
       }
-    }
-  },
-  "InspectionFacility": {
-    "type": "string",
-    "title": "Inspection facility",
-    "description": "InspectionFacility"
-  },
-  "ApprovalFormSubmissionId": {
-    "type": "string",
-    "title": "ApprovalFormSubmissionId",
-    "description": "ApprovalFormSubmissionId"
-  },
-  "InspectionResult": {
-    "type": "string",
-    "title": "Inspection result",
-    "description": "InspectionResult"
-  },
-  "InspectionDate": {
-    "type": "string",
-    "format": "date",
-    "title": "Inspection date",
-    "description": "InspectionDate"
-  },
-  "CertificateInForceForDays": {
-    "type": "number",
-    "title": "Certificate in force for days",
-    "description": "CertificateInForceForDays",
-    "default": 1
-  },
-  "PaperCertificateNumber": {
-    "type": "string",
-    "title": "Paper certificate number",
-    "description": "PaperCertificateNumber",
-    "default": "P"
-  },  
-  "InspectionOfficerNotes": {
-    "type": "string",
-    "title": "Inspection officer notes",
-    "description": "InspectionOfficerNotes"
-  },  
-  "InspectorName": {
-    "type": "string",
-    "title": "Inspector name",
-    "description": "InspectorName"
-  },
-  "InspectorEmail": {
-    "type": "string",
-    "title": "Inspector name",
-    "description": "InspectorEmail"
-  },
-  "ApprovalFlowUpdatedAt": {
-    "type": "Date",
-    "title": "ApprovalFlowUpdatedAt",
-    "description": "ApprovalFlowUpdatedAt"   
-  },
-  "required": []
+    },
+    "ApprovalFormSubmissionId": {
+      "type": "string",
+      "title": "ApprovalFormSubmissionId",
+      "description": "ApprovalFormSubmissionId"
+    },
+    "InspectionFacility": {
+      "type": "string",
+      "title": "Inspection facility",
+      "description": "InspectionFacility"
+    },
+    "InspectionResult": {
+      "type": "string",
+      "title": "Inspection result",
+      "description": "InspectionResult"
+    },
+    "InspectionDate": {
+      "type": "string",
+      "format": "date",
+      "title": "Inspection date",
+      "description": "InspectionDate"
+    },
+    "CertificateInForceForDays": {
+      "type": "number",
+      "title": "Certificate in force for days",
+      "description": "CertificateInForceForDays",
+      "default": 1
+    },
+    "PaperCertificateNumber": {
+      "type": "string",
+      "title": "Paper certificate number",
+      "description": "PaperCertificateNumber",
+      "default": "P"
+    },  
+    "InspectionOfficerNotes": {
+      "type": "string",
+      "title": "Inspection officer notes",
+      "description": "InspectionOfficerNotes"
+    },  
+    "InspectorName": {
+      "type": "string",
+      "title": "Inspector name",
+      "description": "InspectorName"
+    },
+    "InspectorEmail": {
+      "type": "string",
+      "title": "Inspector name",
+      "description": "InspectorEmail"
+    },
+    "ApprovalFlowUpdatedAt": {
+      "type": "Date",
+      "title": "ApprovalFlowUpdatedAt",
+      "description": "ApprovalFlowUpdatedAt"   
+    },
+    "EnvPrefix": {
+      "type": "string",
+      "title": "EnvPrefix",
+      "description": "EnvPrefix"
+    },  
+    "PowerAutomateSecretKey": {
+      "type": "string",
+      "title": "PowerAutomateSecretKey",
+      "description": "PowerAutomateSecretKey"
+    },  
+    "BiosecurityCertificatePdf": {
+      "type": "string",
+      "title": "BiosecurityCertificatePdf",
+      "description": "BiosecurityCertificatePdf"
+    },  
+    "required": []
+  }
 }

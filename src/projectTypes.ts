@@ -66,11 +66,13 @@ export interface FormApprovalFlowInstanceSubset {
 
 export interface ExtraData {
   EnvPrefix: string,
+  PowerAutomateSecretKey: string,
+  BiosecurityCertificatePdf: string
 }
 
 export interface RecordOfMovementAndInspection extends 
   BaseFormSubmissionProjectSpecific, 
   ApprovalFormSubmissionProjectSpecific, 
   FormApprovalFlowInstanceSubset,
-  ExtraData
+  ExtraData 
   {}

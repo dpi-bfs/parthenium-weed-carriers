@@ -32,25 +32,24 @@ import * as Base64Tools from "./localLibrary/base64Tools.mjs"
 // });
 
 
-// async function postToPowerAutomate(certificateFields: CertificateFields) {
-//   console.log("Posting data to power automate");
-//   // const data: SendPostRequest.PostData  = {
-//   const data = {
-//     PowerAutomateSecretKey: process.env.POWER_AUTOMATE_SECRET_KEY,
-//     ExternalId: certificateFields.ExternalId,
-//     FoodHandlerName: certificateFields.FoodHandlerName,
-//     FoodHandlerEmail: certificateFields.FoodHandlerEmail,
-//     SubmissionId: certificateFields.SubmissionId,
-//     SubmissionUtcDateTime: req.body.submissionTimestamp,
-//     SubmissionLocalDateTime: certificateFields.SubmissionLocalDateTime,
-//     FormId: req.body.formId,
-//     Pdf: pdf.toString('base64')
-//   }
-//   console.log("data", data);
+async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
+  console.log("Posting data to power automate");
+  // const data = {
+  //   PowerAutomateSecretKey: process.env.POWER_AUTOMATE_SECRET_KEY,
+  //   ExternalId: certificateFields.ExternalId,
+  //   FoodHandlerName: certificateFields.FoodHandlerName,
+  //   FoodHandlerEmail: certificateFields.FoodHandlerEmail,
+  //   SubmissionId: certificateFields.SubmissionId,
+  //   SubmissionUtcDateTime: req.body.submissionTimestamp,
+  //   SubmissionLocalDateTime: certificateFields.SubmissionLocalDateTime,
+  //   FormId: req.body.formId,
+  //   Pdf: pdf.toString('base64')
+  // }
+  // console.log("data", data);
+  const data = recordOfMovementAndInspection;
 
-//   // FoodHandlerBasicsCertificate-DefaultEnv
-//   await SendPostRequest.sendPostRequest(data, process.env.POWER_AUTOMATE_HTTP_POST_URL!);  
-// }
+  await SendPostRequest.sendPostRequest(data, process.env.POWER_AUTOMATE_HTTP_POST_URL!);  
+}
 
 async function getFormApprovalFlowInstanceSubset(formApprovalFlowInstance: FormApprovalFlowInstance): Promise<FormApprovalFlowInstanceSubset> {
   let formApprovalFlowInstanceSubset: FormApprovalFlowInstanceSubset = { 
@@ -111,8 +110,11 @@ const {
   const formApprovalFlowInstanceSubset: FormApprovalFlowInstanceSubset = await getFormApprovalFlowInstanceSubset(formApprovalFlowInstance)
   console.log('formApprovalFlowInstanceSubset *** 333 ***', formApprovalFlowInstanceSubset)
 
+  // Add recordOfMovementAndInspection.BiosecurityCertificatePdf below.
   const extraData: ProjectTypes.ExtraData = {
-    EnvPrefix: process.env.ENV_PREFIX ?? ''
+    EnvPrefix: process.env.ENV_PREFIX ?? '',
+    PowerAutomateSecretKey: process.env.POWER_AUTOMATE_SECRET_KEY ?? '',
+    BiosecurityCertificatePdf: ""
   }
 
   const recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection = {
@@ -174,9 +176,11 @@ const {
   console.log("certificateFields", certificateFields);
 
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
-    await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
+    recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
   }
-  // postToPowerAutomate(certificateFields);
+
+  await postToPowerAutomate(recordOfMovementAndInspection);
+  
   res.setStatusCode(200);
   res.setHeader('content-type', 'application/json');
   res.setPayload({
