@@ -6,7 +6,7 @@
   "main": "./out/base-form-approval-event.js",
   "config": {
     "externalLibraryPath": "../../../Typescript/library/",
-    "externalLibraryFileList": "dateTime.* mailgunWrapper.* maths.* oneblinkSdkHelpers.* sendPostRequest.* stringTools.* "
+    "externalLibraryFileList": "dateTime.* mailgunWrapper.* maths.* oneblinkSdkHelpers.* logs.* sendPostRequest.* stringTools.* "
   },
   "scripts": {
     "print": "echo %npm_package_config_externalLibraryPath%",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
-    "@oneblink/sdk": "^5.0.0",
+    "@oneblink/sdk": "^5.0.1",
     "abort-controller": "^3.0.0",
     "axios": "^1.6.0",
     "crypto": "^1.0.1",

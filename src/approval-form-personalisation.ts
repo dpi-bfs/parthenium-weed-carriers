@@ -1,16 +1,12 @@
 "use strict";
 
-// import Boom from "@hapi/boom"
 
 import OneBlink from "@oneblink/sdk"
 import * as OneBlinkHelpers from "./lib/oneblinkSdkHelpers.mjs"
-import { SubmissionTypes } from "@oneblink/types";
 import * as ProjectTypes from "./projectTypes.js"
 
-// const formsSDK = new OneBlink.Forms({
-//   accessKey: process.env.FORMS_ACCESS_KEY!,
-//   secretKey: process.env.FORMS_SECRET_KEY!,
-// });
+import * as Logs from "./lib/logs.mjs"
+
 
 const approvalsSDK = new OneBlink.Approvals({
   accessKey: process.env.FORMS_ACCESS_KEY!,
@@ -39,9 +35,9 @@ interface Personalisation {
 }
 
 export let post = async function webhook(req: Request, res: object) {
-  console.log("approval-form-personalisation start");
-  console.log("Validating webhook request payload");
-  console.log("req", req);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("approval-form-personalisation start");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Validating webhook request payload");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("req", req);
 
   let personalisation: Personalisation = {
     submission: {
@@ -97,7 +93,7 @@ export let post = async function webhook(req: Request, res: object) {
   // console.log("personalisation ZZZ plain", personalisation);
 
   // JSON.stringify otherwise the nested carriers array of objects won't display.
-  console.log("personalisation JSON.stringify", JSON.stringify(personalisation, null, 2));
-  console.log("Webhook completed successfully");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("personalisation JSON.stringify", JSON.stringify(personalisation, null, 2));
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Webhook completed successfully");
   return personalisation
 }

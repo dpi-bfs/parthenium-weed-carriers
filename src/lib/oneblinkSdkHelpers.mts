@@ -10,8 +10,8 @@ import OneBlink from "@oneblink/sdk"
 import { SubmissionTypes } from "@oneblink/types";
 import { FormApprovalFlowInstance } from "@oneblink/types/typescript/approvals.js";
 
-// Relative to the project copied to.
-import * as projectTypes from "../projectTypes.js"
+import * as Logs from "./logs.mjs";
+
 
 const formsSDK = new OneBlink.Forms({
   accessKey: process.env.FORMS_ACCESS_KEY!,
@@ -23,10 +23,6 @@ const approvalsSDK = new OneBlink.Approvals({
   secretKey: process.env.FORMS_SECRET_KEY!,
 })
 
-const pdfSDK = new OneBlink.PDF({
-  accessKey: process.env.PDF_ACCESS_KEY!,
-  secretKey: process.env.PDF_SECRET_KEY!,
-});
 
 export interface Request {
   body: {
@@ -110,7 +106,7 @@ export async function getBaseFormSubmission(formId: number,
     isDraft
   );
 
-  // console.log("submission", submission);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("submission", submission);
   return submission as unknown as BaseFormSubmission;
 }
 
@@ -126,22 +122,22 @@ export async function getApprovalFormData(req: Request): Promise<ApprovalFormDat
     formSubmissionApprovals
   } = await formsSDK.getFormSubmissionMeta(req.body.submissionId);
 
-  // console.log("formSubmissionMeta", formSubmissionMeta) // Has submissionTite
-  // if (formApprovalFlowInstance) {
-  //   console.log("formApprovalFlowInstance", formApprovalFlowInstance) // The one we want
-  // } 
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("formSubmissionMeta", formSubmissionMeta) // Has submissionTite
+  if (formApprovalFlowInstance) {
+    if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("formApprovalFlowInstance", formApprovalFlowInstance) // The one we want
+  } 
   
-  // console.log("formSubmissionApprovals", formSubmissionApprovals)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug)  console.log("formSubmissionApprovals", formSubmissionApprovals)
   
   if (formSubmissionApprovals) {
     const approvalStatus = formSubmissionApprovals[0].status
     approvalFormSubmissionId = formSubmissionApprovals[0].approvalFormSubmissionId!
     const approvalFormId = formSubmissionApprovals[0].approvalFormId
     const approvalId = formSubmissionApprovals[0].id
-    // console.log("approvalStatus", approvalStatus);
-    // console.log("approvalFormSubmissionId", approvalFormSubmissionId);
-    // console.log("approvalFormId", approvalFormId);
-    // console.log("approvalId", approvalId);
+    if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("approvalStatus", approvalStatus);
+    if (Logs.LogLevel <= Logs.LogLevelEnum.debug)  console.log("approvalFormSubmissionId", approvalFormSubmissionId);
+    if (Logs.LogLevel <= Logs.LogLevelEnum.debug)  console.log("approvalFormId", approvalFormId);
+    if (Logs.LogLevel <= Logs.LogLevelEnum.debug)  console.log("approvalId", approvalId);
 
 
     if(approvalFormId && approvalFormSubmissionId){
@@ -154,9 +150,9 @@ export async function getApprovalFormData(req: Request): Promise<ApprovalFormDat
       )
       approvalFormSubmission = (result.submission as unknown) as ApprovalFormSubmission;
 
-      // if (approvalFormSubmission) {
-      //   console.log("approvalFormSubmission", approvalFormSubmission);  
-      // }
+      if (approvalFormSubmission) {
+        if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("approvalFormSubmission", approvalFormSubmission);  
+      }
       
     } else {
       throw Boom.badData(`approvalFormId (${approvalFormId}) or approvalFormSubmissionId (${approvalFormSubmissionId}) is undefined`)
@@ -171,7 +167,7 @@ export async function getApprovalFormData(req: Request): Promise<ApprovalFormDat
     } else {
       throw Boom.badData(`approvalId (${approvalId}) is undefined`)
     }
-    // console.log("formSubmissionApproval", formSubmissionApproval);
+    if (Logs.LogLevel <= Logs.LogLevelEnum.debug)  console.log("formSubmissionApproval", formSubmissionApproval);
 
   } else {
     console.error('formSubmissionApprovals is undefined');

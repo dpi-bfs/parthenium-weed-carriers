@@ -1,9 +1,7 @@
 import Boom from "@hapi/boom"
 
-import OneBlink from "@oneblink/sdk"
 import * as OneBlinkHelpers from "./lib/oneblinkSdkHelpers.mjs";
 import * as ProjectTypes from "./projectTypes.js";
-import { SubmissionTypes } from "@oneblink/types";
 import { FormApprovalFlowInstance } from "@oneblink/types/typescript/approvals.js";
 
 import * as OneBlinkToMailgun  from "./localLibrary/oneBlinkToMailgun.mjs";
@@ -15,27 +13,13 @@ import { CertificateFields, FormApprovalFlowInstanceSubset } from "./projectType
 import *  as SendPostRequest from "./lib/sendPostRequest.mjs"
 
 import * as Base64Tools from "./localLibrary/base64Tools.mjs"
-
-// const formsSDK = new OneBlink.Forms({
-//   accessKey: process.env.FORMS_ACCESS_KEY!,
-//   secretKey: process.env.FORMS_SECRET_KEY!,
-// });
-
-// const approvalsSDK = new OneBlink.Approvals({
-//   accessKey: process.env.FORMS_ACCESS_KEY!,
-//   secretKey: process.env.FORMS_SECRET_KEY!,
-// })
-
-// const pdfSDK = new OneBlink.PDF({
-//   accessKey: process.env.PDF_ACCESS_KEY!,
-//   secretKey: process.env.PDF_SECRET_KEY!,
-// });
+import * as Logs from "./lib/logs.mjs"
 
 
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
-  console.log("Posting data to power automate");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");
   // const data = {
-  //   PowerAutomateSecretKey: process.env.POWER_AUTOMATE_SECRET_KEY,
+  //   PowerAuto  mateSecretKey: process.env.POWER_AUTOMATE_SECRET_KEY,
   //   ExternalId: certificateFields.ExternalId,
   //   FoodHandlerName: certificateFields.FoodHandlerName,
   //   FoodHandlerEmail: certificateFields.FoodHandlerEmail,
@@ -78,22 +62,23 @@ interface Response {
 export let post = async function webhook(req: OneBlinkHelpers.Request, res: Response) {
   OneBlinkHelpers.validateWebhook(req);
 
-  console.log("req", req);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("LogLevel", Logs.LogLevel)
   
-  // The first form in the process.
-  // let baseFormSubmission: SubmissionTypes.S3SubmissionData 
-  //   & { baseFormSubmissionId?: string } 
-  // = await OneBlinkHelpers.getBaseFormSubmission(req.body.formId, req.body.submissionId, req.body.isDraft);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("req", req);
+  
+
   let baseFormSubmission: ProjectTypes.BaseFormSubmissionProjectSpecific 
   = await OneBlinkHelpers.getBaseFormSubmission(req.body.formId, 
       req.body.submissionId, 
       req.body.isDraft) as ProjectTypes.BaseFormSubmissionProjectSpecific;
                                                   
   const baseFormSubmissionId = req.body.submissionId;
-  // console.log('baseFormSubmissionId', baseFormSubmissionId)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log('baseFormSubmissionId', baseFormSubmissionId)
 
   baseFormSubmission.BaseFormSubmissionId = baseFormSubmissionId
-  console.log('baseFormSubmission *** 111 ***', baseFormSubmission)
+  baseFormSubmission.BaseFormSubmissionTimestamp = req.body.submissionTimestamp
+  baseFormSubmission.BaseFormId = req.body.formId
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('baseFormSubmission *** 111 ***', baseFormSubmission)
   
 const { 
   approvalFormSubmission, // The form data the approval's user sees and generally manipulates
@@ -102,13 +87,13 @@ const {
 }: ProjectTypes.ApprovalFormDataProjectSpecific = await OneBlinkHelpers.getApprovalFormData(req) as ProjectTypes.ApprovalFormDataProjectSpecific
 
   approvalFormSubmission.ApprovalFormSubmissionId = approvalFormSubmissionId 
-  console.log('approvalFormSubmission *** 222 ***', approvalFormSubmission)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('approvalFormSubmission *** 222 ***', approvalFormSubmission)
 
   console.log('formApprovalFlowInstance', formApprovalFlowInstance)
-  // console.log('approvalFormSubmissionId', approvalFormSubmissionId)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log('approvalFormSubmissionId', approvalFormSubmissionId)
   
   const formApprovalFlowInstanceSubset: FormApprovalFlowInstanceSubset = await getFormApprovalFlowInstanceSubset(formApprovalFlowInstance)
-  console.log('formApprovalFlowInstanceSubset *** 333 ***', formApprovalFlowInstanceSubset)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formApprovalFlowInstanceSubset *** 333 ***', formApprovalFlowInstanceSubset)
 
   // Add recordOfMovementAndInspection.BiosecurityCertificatePdf below.
   const extraData: ProjectTypes.ExtraData = {
@@ -141,17 +126,17 @@ const {
 
   // recordOfMovementAndInspection might have deeply nested objects. E.g. Coming from NSW point.
   // JSON.stringify(x, null, 2) ensures this is displayed properly    
-  console.log('recordOfMovementAndInspection *** 444 ***', JSON.stringify(recordOfMovementAndInspection, null, 2));
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('recordOfMovementAndInspection *** 444 ***', JSON.stringify(recordOfMovementAndInspection, null, 2));
 
   // const qrCodeImage: string = await Base64Tools.getImageAsBase64(`https://api.qrserver.com/v1/create-qr-code/?data=https://nswfoodauthority-dpi-forms-dev.cdn.oneblink.io/forms/19556?preFillData={%22PaperCertificateNumber%22:%22${recordOfMovementAndInspection.PaperCertificateNumber}%22}&format=svg`)
   const qrCodeImage: string = await Base64Tools.getImageAsBase64(`https://api.qrserver.com/v1/create-qr-code/?data=${process.env.BIOSECURITY_CERTIFICATE_LOOKUP_FORM}?preFillData={%22PaperCertificateNumber%22:%22${recordOfMovementAndInspection.PaperCertificateNumber}%22}&format=svg`)
 
-  console.log("recordOfMovementAndInspection.InspectionDate",recordOfMovementAndInspection.InspectionDate);
-  console.log("recordOfMovementAndInspection.CertificateInForceForDays", recordOfMovementAndInspection.CertificateInForceForDays);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("recordOfMovementAndInspection.InspectionDate",recordOfMovementAndInspection.InspectionDate);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("recordOfMovementAndInspection.CertificateInForceForDays", recordOfMovementAndInspection.CertificateInForceForDays);
   const certificateInForceExpiryDateTimeLocalIso = DateTimeTools.addDaysToIsoDate(recordOfMovementAndInspection.InspectionDate, recordOfMovementAndInspection.CertificateInForceForDays);
-  console.log("certificateInForceExpiryDateTimeLocalIso",certificateInForceExpiryDateTimeLocalIso);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateInForceExpiryDateTimeLocalIso",certificateInForceExpiryDateTimeLocalIso);
   const certificateInForceExpiryDateTimeCustom = DateTimeTools.formatDateCustom(certificateInForceExpiryDateTimeLocalIso, 'Australia/Sydney');
-  console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
 
   let certificateFields: CertificateFields = {
     PaperCertificateNumber: recordOfMovementAndInspection.PaperCertificateNumber,
@@ -172,8 +157,8 @@ const {
     QRCodeImage: qrCodeImage
   }
   
-  console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
-  console.log("certificateFields", certificateFields);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateFields", certificateFields);
 
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
@@ -186,7 +171,7 @@ const {
   res.setPayload({
     message: req.url.pathname + " completed."
   })
-  console.log("res set", res);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("res set", res);
 
-  console.log("Webhook completed successfully");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Webhook completed successfully");
 };

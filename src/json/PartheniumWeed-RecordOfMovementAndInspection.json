@@ -6,6 +6,16 @@
       "title": "BaseFormSubmissionId",
       "description": "BaseFormSubmissionId"
     },
+    "BaseFormSubmissionTimestamp": {
+      "type": "string",
+      "title": "BaseFormSubmissionTimestamp",
+      "description": "BaseFormSubmissionTimestamp"
+    },
+    "BaseFormId": {
+      "type": "number",
+      "title": "BaseFormId",
+      "description": "BaseFormId"
+    },
     "trackingCode": {
       "type": "string",
       "title": "Digital reference code",

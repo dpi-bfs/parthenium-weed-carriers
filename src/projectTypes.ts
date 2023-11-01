@@ -38,6 +38,8 @@ export interface CertificateFields {
 
 export interface BaseFormSubmissionProjectSpecific extends OneBlinkHelpers.BaseFormSubmission {
   BaseFormSubmissionId: string,
+  BaseFormSubmissionTimestamp: string,
+  BaseFormId: number,
   PersonResponsibleFirstName: string,
   PersonResponsibleLastName: string,
   PersonResponsibleEmail: string,

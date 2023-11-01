@@ -3,6 +3,8 @@
 import Boom from "@hapi/boom"
 import OneBlink from "@oneblink/sdk"
 
+import * as Logs from "./lib/logs.mjs"
+
 const approvalsSDK = new OneBlink.Approvals({
   accessKey: process.env.FORMS_ACCESS_KEY!,
   secretKey: process.env.FORMS_SECRET_KEY!,
@@ -34,9 +36,9 @@ interface Response {
 // Then when externalIdUrlSearchParam has a value;
 // So we have to handle both cases
 export let post = async function webhook(req: Request, res: Response) {
-  console.log("approval-form-receipt-id start");
-  console.log("Validating webhook request payload");
-  console.log("req", req);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("approval-form-receipt-id start");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Validating webhook request payload");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("req", req);
   
   if (req.body &&
       req.body.formsAppId &&
@@ -73,7 +75,7 @@ export let post = async function webhook(req: Request, res: Response) {
     throw Boom.badRequest("Invalid webhook request payload.", req);
   }
 
-  console.log("Webhook completed successfully");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("Webhook completed successfully");
 
   // No need to return anything given we've set the res object.
 };

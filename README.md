@@ -156,12 +156,11 @@ The code:
 
 * (For convenience) Rename the terminal instance "watch"
 
-* Open the following in three more terminal instances
+* Open the following in two more terminal instances
 
-    \PartheniumWeedCarrier> npx oneblink api serve --env dev;Get-Date  # local dev; or
-    \PartheniumWeedCarrier> npx oneblink api deploy --env dev;Get-Date  # deployment; or
     C:\Users\John\...\Documents\Sda\Code\Typescript\library> npm run watch
-    C:\Users\John\...\Documents\Sda\Code\Typescript\library> npm test
+    C:\Users\John\...\Documents\Sda\Code\Typescript\library> npm test  # Optional
+
 
 * Work on any code and commit it to the local git. 
 
@@ -174,9 +173,12 @@ The code:
     $ENV:ONEBLINK_ACCESS_KEY="TheKeyId"
     $ENV:ONEBLINK_SECRET_KEY="TheKeySecret"
 
-* Deploy command
+* Deploy command. Each, even the local deployment, must come after authentication
 
-    npx oneblink api deploy --env dev;Get-Date
+    \PartheniumWeedCarrier> npx oneblink api serve --env dev;Get-Date  # local dev; or
+    \PartheniumWeedCarrier> npx oneblink api deploy --env dev;Get-Date  # deployment; or
+
+
 
 ### Test code
 
