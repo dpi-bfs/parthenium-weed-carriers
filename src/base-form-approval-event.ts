@@ -15,7 +15,6 @@ import *  as SendPostRequest from "./lib/sendPostRequest.mjs"
 import * as Base64Tools from "./localLibrary/base64Tools.mjs"
 import * as Logs from "./lib/logs.mjs"
 
-
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");
   // const data = {
@@ -60,11 +59,11 @@ interface Response {
 }
 
 export let post = async function webhook(req: OneBlinkHelpers.Request, res: Response) {
+
   OneBlinkHelpers.validateWebhook(req);
 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("LogLevel", Logs.LogLevel)
-  
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("req", req);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("base-form-approval-event start");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("req", req);
   
 
   let baseFormSubmission: ProjectTypes.BaseFormSubmissionProjectSpecific 
@@ -73,12 +72,12 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: Resp
       req.body.isDraft) as ProjectTypes.BaseFormSubmissionProjectSpecific;
                                                   
   const baseFormSubmissionId = req.body.submissionId;
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log('baseFormSubmissionId', baseFormSubmissionId)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log('baseFormSubmissionId', baseFormSubmissionId)
 
   baseFormSubmission.BaseFormSubmissionId = baseFormSubmissionId
   baseFormSubmission.BaseFormSubmissionTimestamp = req.body.submissionTimestamp
   baseFormSubmission.BaseFormId = req.body.formId
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('baseFormSubmission *** 111 ***', baseFormSubmission)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.privacyExposing) console.log('baseFormSubmission *** 111 ***', baseFormSubmission)
   
 const { 
   approvalFormSubmission, // The form data the approval's user sees and generally manipulates
@@ -87,10 +86,10 @@ const {
 }: ProjectTypes.ApprovalFormDataProjectSpecific = await OneBlinkHelpers.getApprovalFormData(req) as ProjectTypes.ApprovalFormDataProjectSpecific
 
   approvalFormSubmission.ApprovalFormSubmissionId = approvalFormSubmissionId 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('approvalFormSubmission *** 222 ***', approvalFormSubmission)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log('approvalFormSubmission *** 222 ***', approvalFormSubmission)
 
-  console.log('formApprovalFlowInstance', formApprovalFlowInstance)
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log('approvalFormSubmissionId', approvalFormSubmissionId)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formApprovalFlowInstance', formApprovalFlowInstance)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('approvalFormSubmissionId', approvalFormSubmissionId)
   
   const formApprovalFlowInstanceSubset: FormApprovalFlowInstanceSubset = await getFormApprovalFlowInstanceSubset(formApprovalFlowInstance)
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formApprovalFlowInstanceSubset *** 333 ***', formApprovalFlowInstanceSubset)
@@ -131,37 +130,51 @@ const {
   // const qrCodeImage: string = await Base64Tools.getImageAsBase64(`https://api.qrserver.com/v1/create-qr-code/?data=https://nswfoodauthority-dpi-forms-dev.cdn.oneblink.io/forms/19556?preFillData={%22PaperCertificateNumber%22:%22${recordOfMovementAndInspection.PaperCertificateNumber}%22}&format=svg`)
   const qrCodeImage: string = await Base64Tools.getImageAsBase64(`https://api.qrserver.com/v1/create-qr-code/?data=${process.env.BIOSECURITY_CERTIFICATE_LOOKUP_FORM}?preFillData={%22PaperCertificateNumber%22:%22${recordOfMovementAndInspection.PaperCertificateNumber}%22}&format=svg`)
 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("recordOfMovementAndInspection.InspectionDate",recordOfMovementAndInspection.InspectionDate);
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("recordOfMovementAndInspection.CertificateInForceForDays", recordOfMovementAndInspection.CertificateInForceForDays);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("recordOfMovementAndInspection.InspectionDate",recordOfMovementAndInspection.InspectionDate);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("recordOfMovementAndInspection.CertificateInForceForDays", recordOfMovementAndInspection.CertificateInForceForDays);
   const certificateInForceExpiryDateTimeLocalIso = DateTimeTools.addDaysToIsoDate(recordOfMovementAndInspection.InspectionDate, recordOfMovementAndInspection.CertificateInForceForDays);
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateInForceExpiryDateTimeLocalIso",certificateInForceExpiryDateTimeLocalIso);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateInForceExpiryDateTimeLocalIso",certificateInForceExpiryDateTimeLocalIso);
   const certificateInForceExpiryDateTimeCustom = DateTimeTools.formatDateCustom(certificateInForceExpiryDateTimeLocalIso, 'Australia/Sydney');
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
 
-  let certificateFields: CertificateFields = {
-    PaperCertificateNumber: recordOfMovementAndInspection.PaperCertificateNumber,
-    InspectorName: recordOfMovementAndInspection.InspectorName,
-    Carriers: recordOfMovementAndInspection.Carriers,
-    CertificateInForceForDays: recordOfMovementAndInspection.CertificateInForceForDays,
-    CertificateInForceExpiryDateTime: certificateInForceExpiryDateTimeCustom,
-    InspectionDate: DateTimeTools.getDatePartAsIfLocal(recordOfMovementAndInspection.InspectionDate),
-    InspectorRole: "Regulatory Officer",
-    InspectorAgency: "NSW DPI",
-    ApprovalFlowUpdatedAt: DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney'),
-    PersonResponsibleName: `${recordOfMovementAndInspection.PersonResponsibleFirstName} ${recordOfMovementAndInspection.PersonResponsibleLastName}`,
-    PersonResponsibleEmail: recordOfMovementAndInspection.PersonResponsibleEmail, 
-    DigitalReferenceCode: recordOfMovementAndInspection.trackingCode,
-    BaseFormSubmissionId: recordOfMovementAndInspection.BaseFormSubmissionId,
-    ApprovalFormSubmissionId: recordOfMovementAndInspection.ApprovalFormSubmissionId,
-    EnvPrefix: recordOfMovementAndInspection.EnvPrefix,
-    QRCodeImage: qrCodeImage
-  }
-  
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("certificateFields", certificateFields);
-
+  const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
+    let certificateFields: CertificateFields = {
+      InspectionDate: DateTimeTools.getDatePartAsIfLocal(recordOfMovementAndInspection.InspectionDate),
+      CertificateInForceForDays: recordOfMovementAndInspection.CertificateInForceForDays,
+      PaperCertificateNumber: recordOfMovementAndInspection.PaperCertificateNumber,
+      InspectorName: recordOfMovementAndInspection.InspectorName,
+      Carriers: recordOfMovementAndInspection.Carriers,
+      CertificateInForceExpiryDateTime: certificateInForceExpiryDateTimeCustom,
+      InspectorRole: "Regulatory Officer",
+      InspectorAgency: "NSW DPI",
+      ApprovalFlowUpdatedAt: ApprovalFlowUpdatedAtLocal,
+      PersonResponsibleName: `${recordOfMovementAndInspection.PersonResponsibleFirstName} ${recordOfMovementAndInspection.PersonResponsibleLastName}`,
+      PersonResponsibleEmail: recordOfMovementAndInspection.PersonResponsibleEmail, 
+      DigitalReferenceCode: recordOfMovementAndInspection.trackingCode,
+      BaseFormSubmissionId: recordOfMovementAndInspection.BaseFormSubmissionId,
+      ApprovalFormSubmissionId: recordOfMovementAndInspection.ApprovalFormSubmissionId,
+      EnvPrefix: recordOfMovementAndInspection.EnvPrefix,
+      QRCodeImage: qrCodeImage
+    }   
+
+    if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
+    if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields", certificateFields);
+
     recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
+  }
+
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) {
+    console.log("******* ID Block Start ********")
+    console.log("trackingCode", recordOfMovementAndInspection.trackingCode)
+    console.log("BaseFormSubmissionId", recordOfMovementAndInspection.BaseFormSubmissionId)
+    console.log("BaseFormSubmissionTimestamp", recordOfMovementAndInspection.BaseFormSubmissionTimestamp)
+    console.log("ApprovalFormSubmissionId", recordOfMovementAndInspection.ApprovalFormSubmissionId)
+    console.log("ApprovalFlowUpdatedAt", ApprovalFlowUpdatedAtLocal)
+    console.log("Person Responsible ", recordOfMovementAndInspection.PersonResponsibleFirstName + " " + recordOfMovementAndInspection.PersonResponsibleLastName)
+    console.log("InspectorName", recordOfMovementAndInspection.InspectorName)
+    console.log("InspectionFacility", recordOfMovementAndInspection.InspectionFacility)
+    console.log("******* ID Block End   ********")
   }
 
   await postToPowerAutomate(recordOfMovementAndInspection);

@@ -36,9 +36,9 @@ interface Response {
 // Then when externalIdUrlSearchParam has a value;
 // So we have to handle both cases
 export let post = async function webhook(req: Request, res: Response) {
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("approval-form-receipt-id start");
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Validating webhook request payload");
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("req", req);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("approval-form-receipt-id start");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("Validating webhook request payload");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("req", req);
   
   if (req.body &&
       req.body.formsAppId &&
@@ -52,7 +52,7 @@ export let post = async function webhook(req: Request, res: Response) {
         req.body.previousFormSubmissionApprovalId
       )
   
-      console.log("formSubmissionApproval", formSubmissionApproval)
+      if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("formSubmissionApproval", formSubmissionApproval)
       baseFormExternalId = formSubmissionApproval.formSubmissionMeta.externalId
       
     } else if(req.body.externalIdUrlSearchParam){
@@ -63,19 +63,19 @@ export let post = async function webhook(req: Request, res: Response) {
       throw Boom.badData("res not set", res);
     }  
 
-    console.log("baseFormExternalId", baseFormExternalId);  
+    if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("baseFormExternalId", baseFormExternalId);  
     res.setStatusCode(200);
     res.setHeader('content-type', 'application/json');
     res.setPayload({
       externalId: baseFormExternalId
     })
-    console.log("res set", res);
+    if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("res set", res);
 
   } else  {
     throw Boom.badRequest("Invalid webhook request payload.", req);
   }
 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.debug) console.log("Webhook completed successfully");
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("Webhook completed successfully");
 
   // No need to return anything given we've set the res object.
 };

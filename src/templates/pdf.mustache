@@ -439,7 +439,9 @@
         </tr>
         <tr>
           <td><label for="ApprovalFlowUpdatedAt">ApprovalFlowUpdatedAt</label><br /><span class="fieldValue" id="ApprovalFlowUpdatedAt">{{ApprovalFlowUpdatedAt}}</span></td>
-          <td><label for="EnvPrefix">EnvPrefix</label><br /><span class="fieldValue" id="EnvPrefix">{{EnvPrefix}}</span></td>
+          <!-- We include the non-breaking space to prevent the fieldValue inline-block from collapsing when in the PROD environment, which returns blank. 
+               We use the hex value because we are using Polyglot XHTML  -->
+          <td><label for="EnvPrefix">EnvPrefix</label><br /><span class="fieldValue" id="EnvPrefix">{{EnvPrefix}}&#x00A0;</span></td>
           <td><label for="CertificateTemplateVersion">CertificateTemplateVersion</label><br /><span class="fieldValue" id="CertificateTemplateVersion">v20231027-0928</span></td>
         </tr>
       </table>        

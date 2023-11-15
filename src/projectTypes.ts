@@ -77,4 +77,5 @@ export interface RecordOfMovementAndInspection extends
   ApprovalFormSubmissionProjectSpecific, 
   FormApprovalFlowInstanceSubset,
   ExtraData 
-  {}
+  {
+  }
