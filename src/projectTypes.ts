@@ -49,6 +49,7 @@ export interface BaseFormSubmissionProjectSpecific extends OneBlinkHelpers.BaseF
 }
 
 export interface ApprovalFormSubmissionProjectSpecific extends OneBlinkHelpers.ApprovalFormSubmission {
+  ApprovalFormId: number,
   Carriers: Carrier[],
   CertificateInForceForDays: number,
   InspectionDate: string,

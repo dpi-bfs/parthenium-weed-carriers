@@ -67,7 +67,8 @@ export interface ApprovalFormSubmission extends SubmissionTypes.S3SubmissionData
 export interface ApprovalFormData {
   approvalFormSubmission: ApprovalFormSubmission,
   formApprovalFlowInstance: FormApprovalFlowInstance,
-  approvalFormSubmissionId: string
+  approvalFormSubmissionId: string,
+  approvalFormId: number
 }
 
 
@@ -129,10 +130,11 @@ export async function getApprovalFormData(req: Request): Promise<ApprovalFormDat
   
   if (Logs.LogLevel <= Logs.LogLevelEnum.error)  console.log("formSubmissionApprovals", formSubmissionApprovals)
   
+  let approvalFormId: number = 0;
   if (formSubmissionApprovals) {
     const approvalStatus = formSubmissionApprovals[0].status
     approvalFormSubmissionId = formSubmissionApprovals[0].approvalFormSubmissionId!
-    const approvalFormId = formSubmissionApprovals[0].approvalFormId
+    approvalFormId = formSubmissionApprovals[0].approvalFormId ?? 0
     const approvalId = formSubmissionApprovals[0].id
     if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("approvalStatus", approvalStatus);
     if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("approvalFormSubmissionId", approvalFormSubmissionId);
@@ -178,7 +180,8 @@ export async function getApprovalFormData(req: Request): Promise<ApprovalFormDat
     result = {
       approvalFormSubmission, 
       formApprovalFlowInstance,
-      approvalFormSubmissionId
+      approvalFormSubmissionId,
+      approvalFormId
     };
   } else {
     throw new Error("approvalFormSubmission or formApprovalFlowInstance are not truthy and they both should be");

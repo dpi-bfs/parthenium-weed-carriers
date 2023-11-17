@@ -735,6 +735,16 @@
       "title": "ApprovalFormSubmissionId",
       "description": "ApprovalFormSubmissionId"
     },
+    "ApprovalFlowUpdatedAt": {
+      "type": "string",
+      "title": "ApprovalFlowUpdatedAt",
+      "description": "ApprovalFlowUpdatedAt"
+    },    
+    "ApprovalFormId": {
+      "type": "number",
+      "title": "ApprovalFormId",
+      "description": "ApprovalFormId"
+    },
     "InspectionFacility": {
       "type": "string",
       "title": "Inspection facility",
@@ -778,11 +788,7 @@
       "title": "Inspector name",
       "description": "InspectorEmail"
     },
-    "ApprovalFlowUpdatedAt": {
-      "type": "string",
-      "title": "ApprovalFlowUpdatedAt",
-      "description": "ApprovalFlowUpdatedAt"
-    },
+
     "EnvPrefix": {
       "type": "string",
       "title": "EnvPrefix",

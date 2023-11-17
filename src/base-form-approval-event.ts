@@ -82,10 +82,12 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: Resp
 const { 
   approvalFormSubmission, // The form data the approval's user sees and generally manipulates
   formApprovalFlowInstance,  // Data about the flow process itself.
-  approvalFormSubmissionId
+  approvalFormSubmissionId,
+  approvalFormId
 }: ProjectTypes.ApprovalFormDataProjectSpecific = await OneBlinkHelpers.getApprovalFormData(req) as ProjectTypes.ApprovalFormDataProjectSpecific
 
   approvalFormSubmission.ApprovalFormSubmissionId = approvalFormSubmissionId 
+  approvalFormSubmission.ApprovalFormId = approvalFormId
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log('approvalFormSubmission *** 222 ***', approvalFormSubmission)
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formApprovalFlowInstance', formApprovalFlowInstance)
