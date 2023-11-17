@@ -23,8 +23,8 @@ function setLoggingLevel() {
       break;
     case "train":
     case "prod":
-      LogLevel = LogLevelEnum.privacyExposing
-      // LogLevel = LogLevelEnum.error
+      // LogLevel = LogLevelEnum.privacyExposing
+      LogLevel = LogLevelEnum.error
       break;
     default:
       throw new Error("Unexpected case reached in switch process.env.ONEBLINK_ENVIRONMENT: " + process.env.ONEBLINK_ENVIRONMENT);
