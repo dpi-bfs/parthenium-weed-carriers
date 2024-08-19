@@ -3,7 +3,7 @@
 import Boom from "@hapi/boom"
 import OneBlink from "@oneblink/sdk"
 
-import * as Logs from "./lib/logs.mjs"
+import * as Logs from "./BfsLibrary/logs.mjs"
 
 const approvalsSDK = new OneBlink.Approvals({
   accessKey: process.env.FORMS_ACCESS_KEY!,

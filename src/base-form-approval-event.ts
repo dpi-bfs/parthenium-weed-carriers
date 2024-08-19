@@ -1,19 +1,19 @@
 import Boom from "@hapi/boom"
 
-import * as OneBlinkHelpers from "./lib/oneblinkSdkHelpers.mjs";
+import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs";
 import * as ProjectTypes from "./projectTypes.js";
 import { FormApprovalFlowInstance } from "@oneblink/types/typescript/approvals.js";
 
 import * as OneBlinkToMailgun  from "./localLibrary/oneBlinkToMailgun.mjs";
 
-import * as StringTools from "./lib/stringTools.mjs";
-import * as DateTimeTools from "./lib/dateTime.mjs"
+import * as StringTools from "./BfsLibrary/stringTools.mjs";
+import * as DateTimeTools from "./BfsLibrary/dateTime.mjs"
 
 import { CertificateFields, FormApprovalFlowInstanceSubset } from "./projectTypes.js";
-import *  as SendPostRequest from "./lib/sendPostRequest.mjs"
+import *  as SendPostRequest from "./BfsLibrary/sendPostRequest.mjs"
 
 import * as Base64Tools from "./localLibrary/base64Tools.mjs"
-import * as Logs from "./lib/logs.mjs"
+import * as Logs from "./BfsLibrary/logs.mjs"
 
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");

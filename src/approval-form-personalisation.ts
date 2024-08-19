@@ -1,10 +1,10 @@
 "use strict";
 
 import OneBlink from "@oneblink/sdk"
-import * as OneBlinkHelpers from "./lib/oneblinkSdkHelpers.mjs"
+import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs"
 import * as ProjectTypes from "./projectTypes.js"
 
-import * as Logs from "./lib/logs.mjs"
+import * as Logs from "./BfsLibrary/logs.mjs"
 
 
 const approvalsSDK = new OneBlink.Approvals({

@@ -1,4 +1,4 @@
-import * as OneBlinkHelpers from "./lib/oneblinkSdkHelpers.mjs"
+import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs"
 
 export interface Carrier {
   CarrierType: string,
