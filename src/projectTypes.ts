@@ -54,7 +54,8 @@ export interface ApprovalFormSubmissionProjectSpecific extends OneBlinkHelpers.A
   CertificateInForceForDays: number,
   InspectionDate: string,
   PaperCertificateNumber: string,
-  InspectionResult: string
+  InspectionResult: string,
+  InspectionFacility: string
 }
 
 export interface ApprovalFormDataProjectSpecific extends OneBlinkHelpers.ApprovalFormData {
