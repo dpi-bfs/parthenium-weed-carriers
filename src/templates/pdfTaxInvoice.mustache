@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Tax Invoice</title>
+  <style>/*<![CDATA[*/
+    /* A comment */
+    th {
+      text-align: left;
+    }
+    td {
+      text-align: right;
+    }
+  /*]]>*/</style> 
+
+</head>
+<body>
+  <h1>Tax Invoice</h1>
+  <h2>Payment Transaction</h2>
+  <p>Payment Reference {{paymentReference}}</p>
+  <table>
+    <tr>
+      <th>Receipt Number</th>
+      <td>{{receiptNumber}}</td>
+    </tr>
+    <tr>
+      <th>Principle Amount</th>
+      <td>{{principalAmount}}</td>
+    <tr></tr>
+    <tr>
+      <th>Surcharge Amount</th>
+      <td>{{surchargeAmount}}</td>
+    </tr>
+    <tr>
+      <th>Amount Paid</th>
+      <td>{{amountPaid}}</td>
+    </tr>
+    <tr>
+      <th>Settlement Date</th>
+      <td>{{settlementDate}}</td>
+    </tr>
+    </tr>
+  </table>
+</body>
+</html>

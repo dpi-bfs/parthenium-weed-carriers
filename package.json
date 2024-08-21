@@ -4,20 +4,13 @@
   "license": "ISC",
   "type": "module",
   "main": "./out/base-form-approval-event.js",
-  "config": {
-    "externalLibraryPath": "../../../Typescript/library/",
-    "externalLibraryFileList": "dateTime.* mailgunWrapper.* maths.* oneblinkSdkHelpers.* logs.* sendPostRequest.* stringTools.* "
-  },
   "scripts": {
-    "print": "echo %npm_package_config_externalLibraryPath%",
     "watch-typescript": "npx tsc --watch",
-    "mirror-library-files": "robocopy %npm_package_config_externalLibraryPath% src/lib %npm_package_config_externalLibraryFileList% /MIR /lev:1",
-    "watch-library-files": "chokidar %npm_package_config_externalLibraryPath%*.{ts,mts} -c \"npm run mirror-library-files\" --initial",
     "copy-assets": "copyfiles -u 1 src/templates/*.mustache out",
     "watch-assets": "chokidar \"src/templates/**/*\" -c \"npm run copy-assets\" --initial",
     "clean": "rimraf out",
-    "watch": "npm-run-all clean --parallel watch-assets watch-library-files watch-typescript",
-    "local-serve": "npx oneblink api serve --env dev;Get-Date",
+    "watch": "npm-run-all clean --parallel watch-assets watch-typescript",
+    "local-serve": "npx oneblink api serve --env local;Get-Date",
     "debug": "npm-run-all --serial watch-typescript local-serve"
   },
   "dependencies": {
