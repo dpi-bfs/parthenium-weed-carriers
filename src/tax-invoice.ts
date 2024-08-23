@@ -55,7 +55,7 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
   }
 
   // Prepare the data for the template
-  const templateData = {
+  const taxInvoiceData = {
     // seller
     sellerEntityName: "sellerEntityName",
     sellerAbn:"sellerAbn",
@@ -87,12 +87,12 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
     amountPaid: formSubmissionPayments[0].paymentTransaction.totalAmount.displayAmount,
   };
 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('templateData:', templateData);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('taxInvoiceData:', taxInvoiceData);
 
   // Render the HTML using Mustache
-  // const content = mustache.render(taxInvoiceTemplate, templateData);
+  // const content = mustache.render(taxInvoiceTemplate, taxInvoiceData);
 
-  const pdfHtml = await Templates.generatePdfTaxInvoice(templateData);
+  const pdfHtml = await Templates.generatePdfTaxInvoice(taxInvoiceData);
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('pdfHtml:', pdfHtml);
   console.log("Generating custom PDF");
   const pdf = await pdfSDK.generatePDF({
@@ -102,7 +102,7 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
   });
 
   const emailAttachment = await formsSDK.uploadEmailAttachment({
-    filename: `TaxInvoice-${templateData.receiptNumber}.pdf`,
+    filename: `TaxInvoice-${taxInvoiceData.romDigitalReferenceCode}-${taxInvoiceData.receiptNumber}.pdf`,
     contentType: 'application/pdf',
     body: pdf,
   })
