@@ -1,6 +1,7 @@
 import { generatePdfHtml } from "./templates/index.mjs";
 import Boom from "@hapi/boom";
 import OneBlink from '@oneblink/sdk';
+import OneBlinkTypes from '@oneblink/types'
 
 import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs";
 import * as Templates from "./templates/index.mjs";
@@ -21,21 +22,69 @@ const pdfSDK = new OneBlink.PDF({
 
 
 // Function to generate the Tax Invoice PDF
-async function generateTaxInvoice(submission, formSubmissionPayments) {
+async function generateTaxInvoice(submission, formSubmissionPayments, romSubmissionId: string) {
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments in generateTaxInvoice:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments[0] in generateTaxInvoice:', JSON.stringify(formSubmissionPayments[0], null, 2));
 
+  // to
+  let toFirstName
+  let toLastName
+  let toAbn
+
+  if (submission.TaxInvoiceTo.includes("Person responsible")) {
+    toFirstName = submission.PersonResponsibleFirstName
+    toLastName = submission.PersonResponsibleLastName
+    toAbn = submission.PersonResponsibleAbn
+
+  } else if (submission.TaxInvoiceTo.includes("Owner")) {
+
+    toFirstName = submission.OwnerFirstName
+    toLastName = submission.OwnerLastName
+    toAbn = submission.OwnerAbn
+
+  } else {
+    throw Boom.badRequest("Unexpected TaxInvoiceTo: ", submission.TaxInvoiceTo);
+  }
+
+  let formatAbnWithSpaces 
+  let toBusinessName
+  if (toAbn) {
+    formatAbnWithSpaces = "ABN: " + new Intl.NumberFormat('en-AU').format(toAbn.ABN.identifierValue).replace(/,/g, ' ');
+    toBusinessName = toAbn.mainName.organisationName
+  }
+
   // Prepare the data for the template
   const templateData = {
-    // invoiceDate: moment().format('YYYY-MM-DD'),
+    // seller
+    sellerEntityName: "sellerEntityName",
+    sellerAbn:"sellerAbn",
+    sellerPhysicalStreetAddress: "sellerPhysicalStreetAddress",
+    sellerPhysicalSuburb: "sellerPhysicalSuburb",
+    sellerPhysicalState: "sellerPhysicalState",
+    sellerPhysicalPostcode: "sellerPhysicalPostcode",
+    sellerPhone: "sellerPhone",
+    sellerEmail: "sellerEmail",
+
+    // to
+    toFirstName: toFirstName,
+    toLastName: toLastName,
+    toBusinessName: toBusinessName,
+    toAbn: formatAbnWithSpaces,
+
+    // descripti on
+    romDigitalReferenceCode: submission.trackingCode,
+    romSubmissionId: romSubmissionId,
+
+    // paymentTransactionDetails
+    paymentReferenceNumber: formSubmissionPayments[0].paymentTransaction.paymentReferenceNumber,
     receiptNumber: formSubmissionPayments[0].paymentTransaction.receiptNumber,
-    paymentReference: formSubmissionPayments[0].submissionId,
+    cardholderName: formSubmissionPayments[0].paymentTransaction.creditCard.cardholderName,
+    cardNumberLast4digits: formSubmissionPayments[0].paymentTransaction.creditCard.maskedCardNumber4Digits.slice(-4),
+    settlementDate: moment(formSubmissionPayments[0].paymentTransaction.settlementDate).format('YYYY-MM-DD'),
     principalAmount: formSubmissionPayments[0].paymentTransaction.principalAmount.displayAmount,
     surchargeAmount: formSubmissionPayments[0].paymentTransaction.surchargeAmount.displayAmount,
     amountPaid: formSubmissionPayments[0].paymentTransaction.totalAmount.displayAmount,
-    settlementDate: moment(formSubmissionPayments[0].paymentTransaction.settlementDate).format('YYYY-MM-DD'),
-    customerReferenceNumber: formSubmissionPayments[0].paymentTransaction.customerReferenceNumber,
   };
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('templateData:', templateData);
@@ -69,25 +118,6 @@ async function generateTaxInvoice(submission, formSubmissionPayments) {
   return attachments
 }
 
-
-// Usage Example
-// (async () => {
-//   const submission = {
-//     quickStreamTransaction: {
-//       transactionId: '1234567890',
-//       amount: 5000, // Amount in cents
-//       paymentMethod: 'Credit Card',
-//       paymentDate: '2024-08-16T00:00:00Z',
-//     },
-//     customerDetails: {
-//       name: 'John Doe',
-//     },
-//   };
-
-//   const attachments = await handleEmailPdfEvent(submission);
-//   console.log('Generated Attachments:', attachments);
-// })();
-
 export let post = async function webhook(req: OneBlinkHelpers.Request, res: object) {
   console.log("Validating webhook request payload");
   if (
@@ -101,7 +131,7 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: obje
 
   console.log("Authorizing webhook request");
   if (req.body.secret !== process.env.CUSTOM_ATTACHMENT_CALLBACK_SECRET) {
-    throw Boom.forbidden("Unauthorised", req.body);
+    throw Boom.forbidden("Unauthorised. Wrong Secret: OneBlink Email+PDF event > Include custom attachment > Secret", req.body);
   }
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("req", req);
@@ -132,7 +162,7 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: obje
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('Submission Data:', submission);
 
-  const attachments = await generateTaxInvoice(submission, formSubmissionPayments);
+  const attachments = await generateTaxInvoice(submission, formSubmissionPayments, req.body.submissionId);
   console.log("Webhook returning attachments ...", attachments);
   return attachments
 };
