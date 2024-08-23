@@ -1,7 +1,7 @@
 import OneBlink from "@oneblink/sdk"
-import * as MailGun from "../lib/mailgunWrapper.mjs";
+import * as MailGun from "../BfsLibrary/mailgunWrapper.mjs";
 
-import * as Logs from "../lib/logs.mjs"
+import * as Logs from "../BfsLibrary/logs.mjs"
 
 import { CertificateFields, FormApprovalFlowInstanceSubset } from "../projectTypes.js";
 import { generatePdfHtml, generateEmailUserHtml, generateEmailBusinessHtml } from "../templates/index.mjs";
