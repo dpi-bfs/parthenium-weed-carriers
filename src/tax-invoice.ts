@@ -39,8 +39,23 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
 
   } else if (submission.TaxInvoiceTo.includes("Owner")) {
 
-    toFirstName = submission.OwnerFirstName
-    toLastName = submission.OwnerLastName
+    if (submission.Owner.includes("Another person")) {
+      toFirstName = submission.PersonResponsibleFirstName
+      toLastName = submission.PersonResponsibleLastName
+      
+    } else if (submission.OwnerFirstName){
+      toFirstName = submission.OwnerFirstName
+      toLastName = submission.OwnerLastName
+
+    } else {
+      throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination:' +
+           ` TaxInvoiceTo: ${submission.TaxInvoiceTo};` +
+           ` Owner: ${submission.Owner};` +
+           ` PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName};` +
+           ` OwnerFirstName: ${submission.OwnerFirstName};`
+          );
+    }
+
     toAbn = submission.OwnerAbn
 
   } else {
