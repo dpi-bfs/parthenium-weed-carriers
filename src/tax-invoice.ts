@@ -6,7 +6,10 @@ import OneBlinkTypes from '@oneblink/types'
 import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs";
 import * as Templates from "./templates/index.mjs";
 import * as Logs from "./BfsLibrary/logs.mjs"
-import moment from 'moment';
+import Moment from 'moment';
+// import * as DateFns from 'date-fns';
+
+import { primaryNswGovernmentLogo } from "./templates/images.mjs"
 
 
 // Initialize the OneBlink Forms SDK
@@ -22,10 +25,18 @@ const pdfSDK = new OneBlink.PDF({
 
 
 // Function to generate the Tax Invoice PDF
-async function generateTaxInvoice(submission, formSubmissionPayments, romSubmissionId: string) {
+async function generateTaxInvoice(
+      submission, 
+      formSubmissionPayments, 
+      formSubmissionMeta: OneBlinkTypes.SubmissionTypes.FormSubmissionMeta
+    ) {
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments in generateTaxInvoice:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments[0] in generateTaxInvoice:', JSON.stringify(formSubmissionPayments[0], null, 2));
+
+  // 
+
+  const formSubmissionPayment = formSubmissionPayments[0]
 
   // to
   let toFirstName
@@ -39,7 +50,7 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
 
   } else if (submission.TaxInvoiceTo.includes("Owner")) {
 
-    if (submission.Owner.includes("Another person")) {
+    if (submission.Owner?.includes("Another person")) {
       toFirstName = submission.PersonResponsibleFirstName
       toLastName = submission.PersonResponsibleLastName
       
@@ -69,8 +80,17 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
     toBusinessName = toAbn.mainName.organisationName
   }
 
+  // new Date("2024-08-27T10:12:03+1000") => 2024-08-27 10:12:03 +10:00
+  const transactionTimeLocalWithOffset = Moment.parseZone(formSubmissionPayment.paymentTransaction.transactionTime).format("YYYY-MM-DD HH:mm Z");
+
+  console.log("formSubmissionPayment.paymentTransaction.transactionTime: ", formSubmissionPayment.paymentTransaction.transactionTime);
+  console.log("transactionTimeLocalWithOffset", transactionTimeLocalWithOffset);
+
   // Prepare the data for the template
   const taxInvoiceData = {
+    // html. Requires triple braces `{{{}}}` in mustache file
+    logo: primaryNswGovernmentLogo,
+
     // seller
     sellerEntityName: "sellerEntityName",
     sellerAbn:"sellerAbn",
@@ -87,25 +107,30 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
     toBusinessName: toBusinessName,
     toAbn: formatAbnWithSpaces,
 
-    // descripti on
-    romDigitalReferenceCode: submission.trackingCode,
-    romSubmissionId: romSubmissionId,
+    // Description
+    paperCertificateNumber: submission.PaperCertificateNumber,
+
+    // technical
+    formName: formSubmissionMeta.formName,
+    formId: formSubmissionMeta.formId,
+    env: process.env.ONEBLINK_ENVIRONMENT,
+    formDigitalReferenceCode: submission.trackingCode,
+    formSubmissionId: formSubmissionMeta.submissionId,
+    formDateTimeSubmitted: formSubmissionMeta.dateTimeSubmitted,
 
     // paymentTransactionDetails
-    paymentReferenceNumber: formSubmissionPayments[0].paymentTransaction.paymentReferenceNumber,
-    receiptNumber: formSubmissionPayments[0].paymentTransaction.receiptNumber,
-    cardholderName: formSubmissionPayments[0].paymentTransaction.creditCard.cardholderName,
-    cardNumberLast4digits: formSubmissionPayments[0].paymentTransaction.creditCard.maskedCardNumber4Digits.slice(-4),
-    settlementDate: moment(formSubmissionPayments[0].paymentTransaction.settlementDate).format('YYYY-MM-DD'),
-    principalAmount: formSubmissionPayments[0].paymentTransaction.principalAmount.displayAmount,
-    surchargeAmount: formSubmissionPayments[0].paymentTransaction.surchargeAmount.displayAmount,
-    amountPaid: formSubmissionPayments[0].paymentTransaction.totalAmount.displayAmount,
+    // paymentReferenceNumber: formSubmissionPayment.paymentTransaction.paymentReferenceNumber,
+    receiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
+    cardholderName: formSubmissionPayment.paymentTransaction.creditCard.cardholderName,
+    cardNumberLast4digits: formSubmissionPayment.paymentTransaction.creditCard.maskedCardNumber4Digits.slice(-4),
+    transactionTime: transactionTimeLocalWithOffset,
+    principalAmount: formSubmissionPayment.paymentTransaction.principalAmount.displayAmount,
+    surchargeAmount: formSubmissionPayment.paymentTransaction.surchargeAmount.displayAmount,
+    amountPaid: formSubmissionPayment.paymentTransaction.totalAmount.displayAmount,
   };
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('taxInvoiceData:', taxInvoiceData);
 
-  // Render the HTML using Mustache
-  // const content = mustache.render(taxInvoiceTemplate, taxInvoiceData);
 
   const pdfHtml = await Templates.generatePdfTaxInvoice(taxInvoiceData);
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('pdfHtml:', pdfHtml);
@@ -117,7 +142,7 @@ async function generateTaxInvoice(submission, formSubmissionPayments, romSubmiss
   });
 
   const emailAttachment = await formsSDK.uploadEmailAttachment({
-    filename: `TaxInvoice-${taxInvoiceData.romDigitalReferenceCode}-${taxInvoiceData.receiptNumber}.pdf`,
+    filename: `TaxInvoice-${taxInvoiceData.formDigitalReferenceCode}-${taxInvoiceData.receiptNumber}.pdf`,
     contentType: 'application/pdf',
     body: pdf,
   })
@@ -173,11 +198,11 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: obje
     throw new Error('formSubmissionMeta data not found.');
   }
 
-  // if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionMeta:', formSubmissionMeta);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionMeta:', formSubmissionMeta);
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('Submission Data:', submission);
 
-  const attachments = await generateTaxInvoice(submission, formSubmissionPayments, req.body.submissionId);
+  const attachments = await generateTaxInvoice(submission, formSubmissionPayments, formSubmissionMeta);
   console.log("Webhook returning attachments ...", attachments);
   return attachments
 };
