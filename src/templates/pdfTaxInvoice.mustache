@@ -7,6 +7,29 @@
   <style>/*<![CDATA[*/
     :root {
       --highlight-border-size: 5px;
+        --nsw-brand-dark: #002664;
+        --nsw-brand-light: #cbedfd;
+        --nsw-brand-supplementary: #146cfd;
+        --nsw-brand-accent: #d7153a;
+        --nsw-black: #000;
+        --nsw-grey-01: #22272b;
+        --nsw-grey-02: #495054;
+        --nsw-grey-03: #cdd3d6;
+        --nsw-grey-04: #ebebeb;
+        --nsw-off-white: #f2f2f2;
+        --nsw-white: #fff;
+        --nsw-status-success: #008a07;
+        --nsw-status-success-bg: #e5f6e6;
+        --nsw-status-info: #2e5299;
+        --nsw-status-info-bg: #eaedf4;
+        --nsw-status-warning: #c95000;
+        --nsw-status-warning-bg: #fbeee5;
+        --nsw-status-error: #b81237;
+        --nsw-status-error-bg: #f7e7eb;
+        --nsw-black-rgb: 0, 0, 0;
+        --nsw-box-shadow: 0 0.25rem 0.75rem 0 rgba(var(--nsw-black-rgb), 0.15);
+        
+        --tax-invoice-paint: var(--nsw-black);
     }
 
     th {
@@ -30,18 +53,21 @@
       margin-bottom: 2em;
     }
 
+    h1, h2 {
+      color: var(--tax-invoice-paint);
+    }
+
     h1 {
       float: left;
     }
 
     #paid {
-      border: 1px solid blue;
-      color: green;
+      color: var(--nsw-status-success);
       font-size: 2em;
-      border: var(--highlight-border-size) solid green;
+      border: var(--highlight-border-size) solid var(--nsw-status-success);
       display: inline-block;
       margin: 0.5em 1em;
-      padding: 0.25em;
+      padding: 0.25em 0.5em;
       border-radius: 1em;
     }
 
@@ -62,18 +88,22 @@
     }
 
     #paymentTransactionDetails tr:nth-last-child(2) th, #paymentTransactionDetails tr:nth-last-child(2) td {
-      padding-bottom: 1em; 
+      padding-bottom: 0.5em; 
     }
 
     tr.amountPaid th, tr.amountPaid td {
       font-weight: bold;
     }
+    tr.amountPaid th {
+      color: var(--tax-invoice-paint);
+    }
     tr.amountPaid td {
       padding: 0.5em;
-      border: var(--highlight-border-size) solid black;
+      border: var(--highlight-border-size) solid var(--tax-invoice-paint);
       border-radius: 1em;
       position: relative;
       right: -0.8em;
+      /* box-shadow: var(--nsw-box-shadow); */
     }
 
     #logo {
@@ -202,8 +232,8 @@
       <td>{{formId}}</td>
     </tr>
     <tr>
-      <th>Env</th>
-      <td>{{env}}</td>
+      <th>API Environment</th>
+      <td>{{apiEnvironment}}</td>
     </tr>
     <tr>
       <th>Form Digital Reference Code</th>

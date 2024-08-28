@@ -34,9 +34,19 @@ async function generateTaxInvoice(
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments in generateTaxInvoice:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments[0] in generateTaxInvoice:', JSON.stringify(formSubmissionPayments[0], null, 2));
 
-  // 
-
   const formSubmissionPayment = formSubmissionPayments[0]
+
+  // This should never occur as when a user on a form's westpac payments card dialog either cancels or provides a dishonoured card,
+  // the payment will cancel back to the form (although there'll be a submission event in the console)
+  if (formSubmissionPayment.status !== "SUCCEEDED" 
+    || formSubmissionPayment.paymentTransaction.responseCode !== "08" 
+    || formSubmissionPayment.paymentTransaction.responseDescription !== "Honour with identification") {
+      
+    throw Boom.badData('Payment not SUCCEEDED, 08, Honour with identification. Was '
+      + `status: ${formSubmissionPayment.status}`
+      + `formSubmissionPayment.paymentTransaction.responseCode: ${formSubmissionPayment.paymentTransaction.responseCode}`
+      + `formSubmissionPayment.paymentTransaction.responseDescription: ${formSubmissionPayment.paymentTransaction.responseDescription}`)
+  }
 
   // to
   let toFirstName
@@ -113,7 +123,7 @@ async function generateTaxInvoice(
     // technical
     formName: formSubmissionMeta.formName,
     formId: formSubmissionMeta.formId,
-    env: process.env.ONEBLINK_ENVIRONMENT,
+    apiEnvironment: process.env.ONEBLINK_ENVIRONMENT,
     formDigitalReferenceCode: submission.trackingCode,
     formSubmissionId: formSubmissionMeta.submissionId,
     formDateTimeSubmitted: formSubmissionMeta.dateTimeSubmitted,
