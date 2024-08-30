@@ -118,13 +118,14 @@
       object-fit: contain;
     }
 
-    #otherPaymentAspects {
-      color: red;
-    }
-
     .smallPrint {
       font-size: 0.8em;
     }
+
+    #todo {
+      color: red;
+    }
+
 
     
   /*]]>*/</style> 
@@ -162,10 +163,9 @@
 <section id="seller">
   {{sellerEntityName}}<br />
   {{sellerAbn}}<br />
-  {{sellerPhysicalStreetAddress}}<br />
-  {{sellerPhysicalSuburb}} {{sellerPhysicalState}} {{sellerPhysicalPostcode}}<br />
+  {{sellerStreetAddress}}<br />
+  {{sellerSuburb}} {{sellerState}} {{sellerPostcode}}<br />
   {{sellerPhone}}<br />
-  {{sellerEmail}}<br />
 </section>
 
 <section id="to">
@@ -215,7 +215,10 @@
 </section>
 
 <section id="otherPaymentAspects" class="smallPrint">
-  GST: todo<br />
+  The purchase is GST-free.
+</section>
+
+<section id="todo" class="smallPrint">
   For a refund please: todo<br />
   The Department Customer Reference Number is not yet configured (an element in the console). So users may be paid and funds deposited in the wrong place.
 </section>

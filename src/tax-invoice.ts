@@ -102,14 +102,13 @@ async function generateTaxInvoice(
     logo: primaryNswGovernmentLogo,
 
     // seller
-    sellerEntityName: "sellerEntityName",
-    sellerAbn:"sellerAbn",
-    sellerPhysicalStreetAddress: "sellerPhysicalStreetAddress",
-    sellerPhysicalSuburb: "sellerPhysicalSuburb",
-    sellerPhysicalState: "sellerPhysicalState",
-    sellerPhysicalPostcode: "sellerPhysicalPostcode",
-    sellerPhone: "sellerPhone",
-    sellerEmail: "sellerEmail",
+    sellerEntityName: "NSW Department of Primary Industries and Regional Development",
+    sellerAbn:"ABN: 19 948 325 463",
+    sellerStreetAddress: "Locked Bag 21",
+    sellerSuburb: "Orange",
+    sellerState: "NSW",
+    sellerPostcode: "2800",
+    sellerPhone: "(02) 6391 3100",
 
     // to
     toFirstName: toFirstName,
