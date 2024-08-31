@@ -11,6 +11,7 @@ export interface Carrier {
 }
 
 export interface CertificateFields {
+  Logo: string,
   PaperCertificateNumber: string,
   InspectorName: string,
   Carriers: Carrier[],

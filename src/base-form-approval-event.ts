@@ -15,6 +15,8 @@ import *  as SendPostRequest from "./BfsLibrary/sendPostRequest.mjs"
 import * as Base64Tools from "./localLibrary/base64Tools.mjs"
 import * as Logs from "./BfsLibrary/logs.mjs"
 
+import { primaryNswGovernmentLogo } from "./templates/images.mjs"
+
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");
   // const data = {
@@ -142,6 +144,7 @@ const {
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     let certificateFields: CertificateFields = {
+      Logo: primaryNswGovernmentLogo,
       InspectionDate: DateTimeTools.getDatePartAsIfLocal(recordOfMovementAndInspection.InspectionDate),
       CertificateInForceForDays: recordOfMovementAndInspection.CertificateInForceForDays,
       PaperCertificateNumber: recordOfMovementAndInspection.PaperCertificateNumber,
