@@ -4,7 +4,7 @@ import * as MailGun from "../BfsLibrary/mailgunWrapper.mjs";
 import * as Logs from "../BfsLibrary/logs.mjs"
 
 import { CertificateFields, FormApprovalFlowInstanceSubset } from "../projectTypes.js";
-import { generatePdfHtml, generateEmailUserHtml, generateEmailBusinessHtml } from "../templates/index.mjs";
+import { generatePdfHtmlBiosecurityCertificate, generateEmailUserHtml, generateEmailBusinessHtml } from "../templates/index.mjs";
 
 const pdfSDK = new OneBlink.PDF({
   accessKey: process.env.PDF_ACCESS_KEY!,
@@ -32,7 +32,7 @@ export async function sendMail(certificateFields: CertificateFields, businessEma
   if (Logs.LogLevel <= Logs.LogLevelEnum.privacyExposing) console.log("emailUBusinessHtml", emailUBusinessHtml);
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("Generating HTML template for custom PDF");
-  const pdfHtml = await generatePdfHtml(certificateFields);
+  const pdfHtml = await generatePdfHtmlBiosecurityCertificate(certificateFields);
   if (Logs.LogLevel <= Logs.LogLevelEnum.privacyExposing) console.log("pdfHtml", pdfHtml);
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("Generating custom PDF");

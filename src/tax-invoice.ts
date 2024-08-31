@@ -141,7 +141,7 @@ async function generateTaxInvoice(
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('taxInvoiceData:', taxInvoiceData);
 
 
-  const pdfHtml = await Templates.generatePdfTaxInvoice(taxInvoiceData);
+  const pdfHtml = await Templates.generatePdfHtmlTaxInvoice(taxInvoiceData);
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('pdfHtml:', pdfHtml);
   console.log("Generating custom PDF");
   const pdf = await pdfSDK.generatePDF({
