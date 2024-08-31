@@ -28,6 +28,10 @@ export interface CertificateFields {
   ApprovalFormSubmissionId: string,
   EnvPrefix: string,
   QRCodeImage: string // Base64 image.
+  PaymentRoute: string,
+  ReceiptNumber: string,
+  CardholderName: string,
+  AmountPaid: string
 }
 
 // export interface WestpacQuickStreamLinks {
@@ -180,7 +184,8 @@ export interface BaseFormSubmissionProjectSpecific extends OneBlinkHelpers.BaseF
   PersonResponsibleEmail: string,
   IsInspectorFillingRom: string,
   InspectorFillingRom: string,  
-  Carriers: Carrier[]
+  Carriers: Carrier[],
+  PaymentRoute: string
 }
 
 export interface ApprovalFormSubmissionProjectSpecific extends OneBlinkHelpers.ApprovalFormSubmission {

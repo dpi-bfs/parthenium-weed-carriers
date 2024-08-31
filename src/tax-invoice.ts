@@ -51,7 +51,7 @@ async function generateTaxInvoice(
   // to
   let toFirstName
   let toLastName
-  let toAbn
+  let toAbn 
 
   if (submission.TaxInvoiceTo.includes("Person responsible")) {
     toFirstName = submission.PersonResponsibleFirstName

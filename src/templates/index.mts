@@ -22,6 +22,6 @@ async function generateHtml(params: Record<string, any>, templateName: string) {
 
 export let generateEmailUserHtml = (params: Record<string, any>) => generateHtml(params, "emailUserPlain.mustache");
 export let generateEmailBusinessHtml = (params: Record<string, any>) => generateHtml(params, "emailBusinessPlain.mustache");
-export let generatePdfHtmlBiosecurityCertificate = (params: Record<string, any>) => generateHtml(params, "pdf.mustache");
+export let generatePdfHtmlBiosecurityCertificate = (params: Record<string, any>) => generateHtml(params, "pdfBiosecurityCertificate.mustache");
 export let generatePdfHtmlTaxInvoice = (params: Record<string, any>) => generateHtml(params, "pdfTaxInvoice.mustache");
 

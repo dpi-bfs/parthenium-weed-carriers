@@ -141,6 +141,9 @@ const {
   const certificateInForceExpiryDateTimeCustom = DateTimeTools.formatDateCustom(certificateInForceExpiryDateTimeLocalIso, 'Australia/Sydney');
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
 
+  const { formSubmissionPayments } = await OneBlinkHelpers.formsSDK.getFormSubmissionMeta(req.body.submissionId)
+  const formSubmissionPayment = formSubmissionPayments[0]
+
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     let certificateFields: CertificateFields = {
@@ -160,7 +163,11 @@ const {
       BaseFormSubmissionId: recordOfMovementAndInspection.BaseFormSubmissionId,
       ApprovalFormSubmissionId: recordOfMovementAndInspection.ApprovalFormSubmissionId,
       EnvPrefix: recordOfMovementAndInspection.EnvPrefix,
-      QRCodeImage: qrCodeImage
+      QRCodeImage: qrCodeImage,
+      PaymentRoute: recordOfMovementAndInspection.PaymentRoute,
+      ReceiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
+      CardholderName: formSubmissionPayment?.paymentTransaction?.creditCard.cardholderName,
+      AmountPaid: formSubmissionPayment?.paymentTransaction?.totalAmount.displayAmount,
     }   
 
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
