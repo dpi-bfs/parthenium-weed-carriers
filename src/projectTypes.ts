@@ -34,7 +34,8 @@ export interface CertificateFields {
   ToLastName: string,
   ToBusinessName: string,
   // CardholderName: string,
-  AmountPaid: string
+  AmountPaid: string,
+  NswDestinationsNotificationFormLink: string,
 }
 
 // export interface WestpacQuickStreamLinks {

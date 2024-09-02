@@ -16,7 +16,7 @@ import *  as SendPostRequest from "./BfsLibrary/sendPostRequest.mjs"
 import * as Base64Tools from "./localLibrary/base64Tools.mjs"
 import * as Logs from "./BfsLibrary/logs.mjs"
 
-import { primaryNswGovernmentLogo } from "./templates/images.mjs"
+import { primaryNswGovernmentLogo, getNswDestinationsNotificationPersonalisedImgQRCode } from "./templates/images.mjs"
 
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");
@@ -148,6 +148,31 @@ const {
   const { ToFirstName, ToLastName,  ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission)
 
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
+
+  let nswDestinationsNotificationFormLink: string;
+
+  switch (process.env.ONEBLINK_ENVIRONMENT){
+    case "local":
+    case "dev":
+      nswDestinationsNotificationFormLink = "https://nswfoodauthority-dpi-forms-dev.cdn.oneblink.io/forms/23378"
+      break;
+    case "test":
+      nswDestinationsNotificationFormLink = "https://forms-test.bfs.dpi.nsw.gov.au/forms/23395"
+      break;
+    case "train":
+      nswDestinationsNotificationFormLink = "https://forms-train.bfs.dpi.nsw.gov.au/forms/23396"
+      break;
+    case "prod":
+      nswDestinationsNotificationFormLink = "https://forms.bfs.dpi.nsw.gov.au/forms/23397"
+      break;
+    default: 
+    nswDestinationsNotificationFormLink = ''
+  }
+
+  nswDestinationsNotificationFormLink += `?preFillData={"PaperCertificateNumber":"${recordOfMovementAndInspection.PaperCertificateNumber}"}`;
+
+  const nswDestinationsNotificationFormLinkQRImg = getNswDestinationsNotificationPersonalisedImgQRCode(recordOfMovementAndInspection.PaperCertificateNumber);
+  
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     let certificateFields: CertificateFields = {
       Logo: primaryNswGovernmentLogo,
@@ -177,6 +202,9 @@ const {
 
       AmountPaid: formSubmissionPayment?.paymentTransaction?.totalAmount.displayAmount,
       // CardholderName: formSubmissionPayment?.paymentTransaction?.creditCard.cardholderName,
+
+      NswDestinationsNotificationFormLink: nswDestinationsNotificationFormLink,
+      NswDestinationsNotificationFormLinkQRImg: nswDestinationsNotificationFormLinkQRImg,
     }   
 
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
