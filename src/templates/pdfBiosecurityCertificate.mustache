@@ -151,8 +151,6 @@
     justify-self: end;
   }
 
-  
-
   footer {
     margin-top: 0.5em;
     border-top: 1px solid var(--nsw-palette-grey-02);
@@ -192,6 +190,7 @@
 
   p, table {
     margin: 1rem 0 0 0;
+    width: 100%;
   }
   th {
     text-align: left;
@@ -281,7 +280,7 @@
     </div>
 
     <!-- <img id='logo' src="https://nswfoodauthority-parthenium-carrier-dev.cdn.oneblink.io/images/logos/PRIMARY-nsw-government-logo.svg" alt="Logo NSW Government. Development stub" />  -->
-    <!-- {{{Logo}}}  -->
+    {{{Logo}}}
   </header>
 
   <main>
@@ -307,6 +306,14 @@
           </tr>
           {{/Carriers}}
         </tbody>
+        <!-- <tbody>
+          <tr>
+            <td class="fieldValue">Grain Harvester - including comb or front </td>
+            <td class="fieldValue">Toyota Big Thresher </td>
+            <td class="fieldValue">AAA222</td>
+            <td class="fieldValue">111222</td>
+          </tr>
+        </tbody> -->
       </table>
       <p>I hereby certify that:</p>
       <ol>
@@ -351,9 +358,27 @@
     </section>
 
     <section>
-      <h2>Payment transaction details</h2>
+      <h2>Tax invoice and receipt (mini)</h2>
       <p>Payment route: <span class="fieldValue">{{PaymentRoute}}</span></p>
       <table id="paymentTransactionDetails">
+        <thead>
+          <tr>
+            <th>Receipt number</th>
+            <th>To Contact Name</th>
+            <th>To Business Name</th>
+            <th>Amount Paid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fieldValue">{{ReceiptNumber}}</td>
+            <td class="fieldValue">{{ToFirstName}} {{ToLastName}}</td>
+            <td class="fieldValue">{{ToBusinessName}}</td>
+            <td class="fieldValue">{{AmountPaid}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <table id="paymentTransactionDetails">
         <thead>
           <tr>
             <th>Receipt number</th>
@@ -368,8 +393,8 @@
             <td class="fieldValue">{{AmountPaid}}</td>
           </tr>
         </tbody>
-      </table>
-      <p class="finePrint">Amount paid is GST-free and includes card surcharge. A Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo)</span></p>
+      </table> -->
+      <p class="finePrint">This constitutes a (mini) Tax Invoice and receipt. Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo)</span></p>
     </section>
 
     <section>

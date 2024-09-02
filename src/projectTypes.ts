@@ -30,7 +30,10 @@ export interface CertificateFields {
   QRCodeImage: string // Base64 image.
   PaymentRoute: string,
   ReceiptNumber: string,
-  CardholderName: string,
+  ToFirstName: string,
+  ToLastName: string,
+  ToBusinessName: string,
+  // CardholderName: string,
   AmountPaid: string
 }
 
@@ -185,7 +188,8 @@ export interface BaseFormSubmissionProjectSpecific extends OneBlinkHelpers.BaseF
   IsInspectorFillingRom: string,
   InspectorFillingRom: string,  
   Carriers: Carrier[],
-  PaymentRoute: string
+  PaymentRoute: string,
+  TaxInvoiceTo: string,
 }
 
 export interface ApprovalFormSubmissionProjectSpecific extends OneBlinkHelpers.ApprovalFormSubmission {

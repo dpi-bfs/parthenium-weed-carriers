@@ -5,6 +5,7 @@ import * as ProjectTypes from "./projectTypes.js";
 import { FormApprovalFlowInstance } from "@oneblink/types/typescript/approvals.js";
 
 import * as OneBlinkToMailgun  from "./localLibrary/oneBlinkToMailgun.mjs";
+import { setTaxInvoiceToFields } from "./localLibrary/set-tax-invoice-to-fields.js";
 
 import * as StringTools from "./BfsLibrary/stringTools.mjs";
 import * as DateTimeTools from "./BfsLibrary/dateTime.mjs"
@@ -144,6 +145,8 @@ const {
   const { formSubmissionPayments } = await OneBlinkHelpers.formsSDK.getFormSubmissionMeta(req.body.submissionId)
   const formSubmissionPayment = formSubmissionPayments[0]
 
+  const { ToFirstName, ToLastName,  ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission)
+
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     let certificateFields: CertificateFields = {
@@ -166,8 +169,14 @@ const {
       QRCodeImage: qrCodeImage,
       PaymentRoute: recordOfMovementAndInspection.PaymentRoute,
       ReceiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
-      CardholderName: formSubmissionPayment?.paymentTransaction?.creditCard.cardholderName,
+      
+      // to
+      ToFirstName: ToFirstName,
+      ToLastName: ToLastName,
+      ToBusinessName: ToBusinessName,
+
       AmountPaid: formSubmissionPayment?.paymentTransaction?.totalAmount.displayAmount,
+      // CardholderName: formSubmissionPayment?.paymentTransaction?.creditCard.cardholderName,
     }   
 
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")

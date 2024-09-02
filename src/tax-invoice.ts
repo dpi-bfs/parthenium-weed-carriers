@@ -1,4 +1,5 @@
-import { generatePdfHtml } from "./templates/index.mjs";
+import { generatePdfHtmlTaxInvoice } from "./templates/index.mjs";
+import { setTaxInvoiceToFields } from "./localLibrary/set-tax-invoice-to-fields.js";
 import Boom from "@hapi/boom";
 import OneBlink from '@oneblink/sdk';
 import OneBlinkTypes from '@oneblink/types'
@@ -47,48 +48,8 @@ async function generateTaxInvoice(
       + `formSubmissionPayment.paymentTransaction.responseCode: ${formSubmissionPayment.paymentTransaction.responseCode}`
       + `formSubmissionPayment.paymentTransaction.responseDescription: ${formSubmissionPayment.paymentTransaction.responseDescription}`)
   }
-
-  // to
-  let toFirstName
-  let toLastName
-  let toAbn 
-
-  if (submission.TaxInvoiceTo.includes("Person responsible")) {
-    toFirstName = submission.PersonResponsibleFirstName
-    toLastName = submission.PersonResponsibleLastName
-    toAbn = submission.PersonResponsibleAbn
-
-  } else if (submission.TaxInvoiceTo.includes("Owner")) {
-
-    if (submission.Owner?.includes("Another person")) {
-      toFirstName = submission.PersonResponsibleFirstName
-      toLastName = submission.PersonResponsibleLastName
-      
-    } else if (submission.OwnerFirstName){
-      toFirstName = submission.OwnerFirstName
-      toLastName = submission.OwnerLastName
-
-    } else {
-      throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination:' +
-           ` TaxInvoiceTo: ${submission.TaxInvoiceTo};` +
-           ` Owner: ${submission.Owner};` +
-           ` PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName};` +
-           ` OwnerFirstName: ${submission.OwnerFirstName};`
-          );
-    }
-
-    toAbn = submission.OwnerAbn
-
-  } else {
-    throw Boom.badRequest("Unexpected TaxInvoiceTo: ", submission.TaxInvoiceTo);
-  }
-
-  let formatAbnWithSpaces 
-  let toBusinessName
-  if (toAbn) {
-    formatAbnWithSpaces = "ABN: " + new Intl.NumberFormat('en-AU').format(toAbn.ABN.identifierValue).replace(/,/g, ' ');
-    toBusinessName = toAbn.mainName.organisationName
-  }
+ 
+  const { ToFirstName, ToLastName,  ToBusinessName, ToAbn } = setTaxInvoiceToFields(submission)
 
   // new Date("2024-08-27T10:12:03+1000") => 2024-08-27 10:12:03 +10:00
   const transactionTimeLocalWithOffset = Moment.parseZone(formSubmissionPayment.paymentTransaction.transactionTime).format("YYYY-MM-DD HH:mm Z");
@@ -111,10 +72,10 @@ async function generateTaxInvoice(
     sellerPhone: "(02) 6391 3100",
 
     // to
-    toFirstName: toFirstName,
-    toLastName: toLastName,
-    toBusinessName: toBusinessName,
-    toAbn: formatAbnWithSpaces,
+    toFirstName: ToFirstName,
+    toLastName: ToLastName,
+    toBusinessName: ToBusinessName,
+    toAbn: ToAbn,
 
     // Description
     paperCertificateNumber: submission.PaperCertificateNumber,
