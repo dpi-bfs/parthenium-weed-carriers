@@ -6,70 +6,79 @@ export const QRCodeExample = `<figure>
         <figcaption>View an online copy of your certificate or other's.</figcaption>     
       </figure>`
 
+export enum PartheniumWeedFormType {
+  NswDestinationsNotification,
+  PaymentAfterBorderCrossing
+}
 
-  function loadImage(src: string) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
+/**
+ * @param {string} paperCertificateNumber - E.g "Q1222"
+ * @param {PartheniumWeedFormType} form - E.g. PartheniumWeedFormType.NswDestinationsNotification
+ * 
+ * @returns {formLinkPrefilled: string, imgHtml:string}
+ */
+export function getFormLinkAndImgQRCode(paperCertificateNumber: string, form: PartheniumWeedFormType): {formLinkPrefilled: string, imgHtml:string} {
 
-        img.onload = () => {
-            resolve(img.src);
-        };
+  let formLinkPrefilled: string;
+  let altText: string;
 
-        img.onerror = () => {
-            reject(new Error('Image failed to load'));
-        };
+  switch(form) {
+    case PartheniumWeedFormType.PaymentAfterBorderCrossing:
+      switch (process.env.ONEBLINK_ENVIRONMENT){
+        case "local":
+        case "dev":
+          formLinkPrefilled = "https://nswfoodauthority-dpi-forms-dev.cdn.oneblink.io/forms/23357"
+          break;
+        case "test":
+          formLinkPrefilled = "https://forms-test.bfs.dpi.nsw.gov.au/forms/23392"
+          break;
+        case "train":
+          formLinkPrefilled = "https://forms-train.bfs.dpi.nsw.gov.au/forms/23393"
+          break;
+        case "prod":
+          formLinkPrefilled = "https://forms.bfs.dpi.nsw.gov.au/forms/23394"
+          break;
+        default: 
+        throw new Error (`Unexpected process.env.ONEBLINK_ENVIRONMENT in switch ${process.env.ONEBLINK_ENVIRONMENT}`);
+      }
+      altText = 'Payment after Border Crdossing form QR Code, personalised'
+      break;    
 
-        img.src = src;
-    });
+    case PartheniumWeedFormType.NswDestinationsNotification:      
+      switch (process.env.ONEBLINK_ENVIRONMENT){
+        case "local":
+          case "dev":
+            formLinkPrefilled = "https://nswfoodauthority-dpi-forms-dev.cdn.oneblink.io/forms/23378"
+            break;
+            case "test":
+              formLinkPrefilled = "https://forms-test.bfs.dpi.nsw.gov.au/forms/23395"
+            break;
+          case "train":
+            formLinkPrefilled = "https://forms-train.bfs.dpi.nsw.gov.au/forms/23396"
+            break;
+          case "prod":
+            formLinkPrefilled = "https://forms.bfs.dpi.nsw.gov.au/forms/23397"
+            break;
+          default: 
+          throw new Error (`Unexpected process.env.ONEBLINK_ENVIRONMENT in switch ${process.env.ONEBLINK_ENVIRONMENT}`);
+        }
+        altText = 'NSW Destinations Notification form QR Code, personalised'
+      break;
+      
+    default:
+      throw new Error (`Unexpected PartheniumWeedFormType case in switch ${form}`);
+  }
+
+  formLinkPrefilled += `?preFillData={"PaperCertificateNumber":"${paperCertificateNumber}"}`;
+  const QRSrc = `https://api.qrserver.com/v1/create-qr-code/?format=svg&size=80x80&data=${formLinkPrefilled}`
+
+  const imgHtml = `<img alt='${altText}' src='${QRSrc}' />`
+  
+  console.log('imgHtml', imgHtml);
+  return { 
+    formLinkPrefilled: formLinkPrefilled, 
+    imgHtml: imgHtml, 
+  }
 }
 
 
-/**
- * 
- * @param paperCertificateNumber 
- *  E.g "Q1222"
- * 
- * Returns:
- *  A QR code to be used as the src of an img element, with query parameters that prefill the
- *  Parthenium Weed Carriers - NSW Destinations Notification form
- */
-export function getNswDestinationsNotificationPersonalisedImgQRCode(paperCertificateNumber: string) {
-
-  let nswDestinationsNotificationFormLink: string;
-
-  switch (process.env.ONEBLINK_ENVIRONMENT){
-    case "local":
-    case "dev":
-      nswDestinationsNotificationFormLink = "https://nswfoodauthority-dpi-forms-dev.cdn.oneblink.io/forms/23378"
-      break;
-    case "test":
-      nswDestinationsNotificationFormLink = "https://forms-test.bfs.dpi.nsw.gov.au/forms/23395"
-      break;
-    case "train":
-      nswDestinationsNotificationFormLink = "https://forms-train.bfs.dpi.nsw.gov.au/forms/23396"
-      break;
-    case "prod":
-      nswDestinationsNotificationFormLink = "https://forms.bfs.dpi.nsw.gov.au/forms/23397"
-      break;
-    default: 
-    nswDestinationsNotificationFormLink = ''
-  }
-
-  nswDestinationsNotificationFormLink += `?preFillData={"PaperCertificateNumber":"${paperCertificateNumber}"}`;
-
-  let QRSrc = `https://api.qrserver.com/v1/create-qr-code/?format=svg&size=80x80&data=${nswDestinationsNotificationFormLink}`
-
-    // Example usage
-  // loadImage(`https://api.qrserver.com/v1/create-qr-code/?&data=${nswDestinationsNotificationFormLink};format=svg;size=80x80`)
-  // .then((QRSrc) => {
-  //     console.log("Image loaded:", QRSrc);
-  //     // You can now use the finalSrc value
-  // })
-  // .catch((error) => {
-  //     console.error(error);
-  // });
-
-  const imgHtml = `<img alt='NSW destinations notification form link, personalised' src='${QRSrc}' />`
-  console.log('imgHtml', imgHtml);
-  return imgHtml
-}      
