@@ -143,15 +143,57 @@ const {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
 
   const { formSubmissionPayments } = await OneBlinkHelpers.formsSDK.getFormSubmissionMeta(req.body.submissionId)
-  const formSubmissionPayment = formSubmissionPayments[0]
 
-  const { ToFirstName, ToLastName,  ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission)
+  let formSubmissionPayment;
+  let ToFirstName;
+  let ToLastName;
+  let ToBusinessName;
+
+  if (formSubmissionPayments && formSubmissionPayments[0]) {
+    formSubmissionPayment = formSubmissionPayments[0]
+    let { ToFirstName, ToLastName, ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission)
+  }
+
 
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
 
   const {formLinkPrefilled: nswDestinationsNotificationFormLink, imgHtml: nswDestinationsNotificationFormLinkQRImg } = getFormLinkAndImgQRCode(recordOfMovementAndInspection.PaperCertificateNumber, PartheniumWeedFormType.NswDestinationsNotification)
 
   const {formLinkPrefilled: paymentAfterBorderCrossingFormLink, imgHtml: paymentAfterBorderCrossingFormLinkQRImg } = getFormLinkAndImgQRCode(recordOfMovementAndInspection.PaperCertificateNumber, PartheniumWeedFormType.PaymentAfterBorderCrossing)
+
+  let paymentAfterBorderCrossingTextWithHtml ;
+  let figurePaymentAfterBorderCrossingQRCodeVisibility: 'visible' | 'hidden';
+
+  const paymentDoneTextWithHtml = `<p class="finePrint">This constitutes a (mini) Tax Invoice and receipt. Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo).</span></p>`
+
+  switch (recordOfMovementAndInspection.PaymentRoute){
+    case undefined:
+      // PaymentRoute is undefined as as user forced to pay at ROM stage; without PaymentRoute being shown on the form
+      if (recordOfMovementAndInspection.IsInspectorFillingRom === "Yes") {
+        throw Boom.badData("Assertion failure. Expected recordOfMovementAndInspection.IsInspectorFillingRom to be no but was yes.: " + recordOfMovementAndInspection.IsInspectorFillingRom)
+      }
+      paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
+      figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      break;
+
+    case 'Pay now by card':
+      paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
+      figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      break;
+
+    case 'Pay after border crossing':
+      paymentAfterBorderCrossingTextWithHtml = `<span>You must pay after the border crossing into NSW, within 7 days. Please click <a href="${paymentAfterBorderCrossingFormLink}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</span>`
+      figurePaymentAfterBorderCrossingQRCodeVisibility = 'visible'
+      break;
+
+    case 'No payment required':
+      paymentAfterBorderCrossingTextWithHtml = `<p class="finePrint">No payment is required. For example, because this is for the 2023 season when fees where waived in general.</p>`
+      figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      break;
+
+    default: 
+      throw Boom.badData("Unexpected recordOfMovementAndInspection.PaymentRoute case in switch: " + recordOfMovementAndInspection.PaymentRoute)
+  }
   
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     let certificateFields: CertificateFields = {
@@ -183,8 +225,9 @@ const {
       AmountPaid: formSubmissionPayment?.paymentTransaction?.totalAmount.displayAmount,
       // CardholderName: formSubmissionPayment?.paymentTransaction?.creditCard.cardholderName,
 
-      PaymentAfterBorderCrossingFormLink: paymentAfterBorderCrossingFormLink,
+      PaymentAfterBorderCrossingTextWithHtml: paymentAfterBorderCrossingTextWithHtml,
       PaymentAfterBorderCrossingFormLinkQRImg: paymentAfterBorderCrossingFormLinkQRImg,
+      FigurePaymentAfterBorderCrossingQRCodeVisibility: figurePaymentAfterBorderCrossingQRCodeVisibility,
 
       NswDestinationsNotificationFormLink: nswDestinationsNotificationFormLink,
       NswDestinationsNotificationFormLinkQRImg: nswDestinationsNotificationFormLinkQRImg,
