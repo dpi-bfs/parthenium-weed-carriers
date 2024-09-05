@@ -183,7 +183,7 @@ const {
       break;
 
     case 'Pay after border crossing':
-      paymentAfterBorderCrossingTextWithHtml = `<span>You must pay after the border crossing into NSW, within 7 days. Please click <a href="${paymentAfterBorderCrossingFormLink}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</span>`
+      paymentAfterBorderCrossingTextWithHtml = `<p class="finePrint">You must pay after the border crossing into NSW, within 7 days. Please click <a href="${paymentAfterBorderCrossingFormLink}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</p>`
       figurePaymentAfterBorderCrossingQRCodeVisibility = 'visible'
       break;
 
