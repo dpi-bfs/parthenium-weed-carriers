@@ -29,7 +29,8 @@ interface Personalisation {
     PersonResponsibleEmail: string,
     IsInspectorFillingRom: string,
     InspectorFillingRom: string,
-    Carriers: ProjectTypes.Carrier[]
+    Carriers: ProjectTypes.Carrier[],
+    PaymentRoute: string,
   }
 }
 
@@ -46,7 +47,8 @@ export let post = async function webhook(req: Request, res: object) {
       PersonResponsibleEmail: "",
       IsInspectorFillingRom: "",
       InspectorFillingRom: "",      
-      Carriers: []
+      Carriers: [],
+      PaymentRoute: "",
     }
   }
   
@@ -60,7 +62,6 @@ export let post = async function webhook(req: Request, res: object) {
       req.body.previousFormSubmissionApprovalId
     )
 
-    // console.log("formSubmissionApproval", formSubmissionApproval)
 
     const baseFormFormId = formSubmissionApproval.formSubmissionMeta.formId
     const baseFormSubmissionId = formSubmissionApproval.formSubmissionMeta.submissionId
@@ -69,7 +70,7 @@ export let post = async function webhook(req: Request, res: object) {
     const baseFormSubmission: ProjectTypes.BaseFormSubmissionProjectSpecific = await OneBlinkHelpers.getBaseFormSubmission(baseFormFormId,
                           baseFormSubmissionId,
                           baseFormIsDraft) as ProjectTypes.BaseFormSubmissionProjectSpecific;
-    // console.log('baseFormSubmission ZZZ', baseFormSubmission);
+    
 
     personalisation = {
       "submission": {
@@ -79,7 +80,8 @@ export let post = async function webhook(req: Request, res: object) {
         PersonResponsibleEmail:  baseFormSubmission.PersonResponsibleEmail,
         IsInspectorFillingRom: baseFormSubmission.IsInspectorFillingRom,
         InspectorFillingRom: baseFormSubmission.InspectorFillingRom,        
-        Carriers: baseFormSubmission.Carriers
+        Carriers: baseFormSubmission.Carriers,
+        PaymentRoute: baseFormSubmission.PaymentRoute ?? 'Pay now by card - user filled ROM'
       }
     }
     // Option sets, as with CarrierType, don't set with brackets () in the values.
