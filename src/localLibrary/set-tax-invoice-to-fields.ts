@@ -1,4 +1,5 @@
 import Boom from "@hapi/boom";
+import * as Logs from "../BfsLibrary/logs.mjs"
 
 export function setTaxInvoiceToFields(submission) {
   let toFirstName
@@ -9,6 +10,8 @@ export function setTaxInvoiceToFields(submission) {
     toFirstName = submission.PersonResponsibleFirstName
     toLastName = submission.PersonResponsibleLastName
     toAbn = submission.PersonResponsibleAbn
+
+    if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`111 toFirstName ${toFirstName}`);
 
   } else if (submission.TaxInvoiceTo.includes("Owner")) {
 
@@ -35,12 +38,16 @@ export function setTaxInvoiceToFields(submission) {
     throw Boom.badRequest("Unexpected TaxInvoiceTo: ", submission.TaxInvoiceTo);
   }
 
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`222 toFirstName ${toFirstName}`);
+
   let formatAbnWithSpaces 
   let toBusinessName
   if (toAbn) {
     formatAbnWithSpaces = "ABN: " + new Intl.NumberFormat('en-AU').format(toAbn.ABN.identifierValue).replace(/,/g, ' ');
     toBusinessName = toAbn.mainName.organisationName
+    if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`111 toBusinessName ${toBusinessName}`);
   }
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`222 toBusinessName ${toBusinessName}`);
 
   return {
     ToFirstName: toFirstName,

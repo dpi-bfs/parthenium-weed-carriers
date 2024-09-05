@@ -150,10 +150,9 @@ const {
   let ToBusinessName;
 
   if (formSubmissionPayments && formSubmissionPayments[0]) {
-    formSubmissionPayment = formSubmissionPayments[0]
-    let { ToFirstName, ToLastName, ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission)
+    formSubmissionPayment = formSubmissionPayments[0];
+    ({ ToFirstName, ToLastName, ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission))
   }
-
 
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
 
@@ -174,6 +173,8 @@ const {
       }
       paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
       figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+
+      recordOfMovementAndInspection.PaymentRoute = 'Pay now by card - user filled ROM'
       break;
 
     case 'Pay now by card':
