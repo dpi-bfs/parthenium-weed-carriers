@@ -177,7 +177,7 @@ const {
       recordOfMovementAndInspection.PaymentRoute = 'Pay now by card - user filled ROM'
       break;
 
-    case 'Pay now by card':
+    case 'Pay now by card - certifier filled ROM':
       paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
       figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
       break;

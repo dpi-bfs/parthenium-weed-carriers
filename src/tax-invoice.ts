@@ -7,7 +7,7 @@ import OneBlinkTypes from '@oneblink/types'
 import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs";
 import * as Templates from "./templates/index.mjs";
 import * as Logs from "./BfsLibrary/logs.mjs"
-import Moment from 'moment';
+import Moment from 'moment-timezone';
 // import * as DateFns from 'date-fns';
 
 import { primaryNswGovernmentLogo } from "./templates/images.mjs"
@@ -52,10 +52,10 @@ async function generateTaxInvoice(
   const { ToFirstName, ToLastName,  ToBusinessName, ToAbn } = setTaxInvoiceToFields(submission)
 
   // new Date("2024-08-27T10:12:03+1000") => 2024-08-27 10:12:03 +10:00
-  const transactionTimeLocalWithOffset = Moment.parseZone(formSubmissionPayment.paymentTransaction.transactionTime).format("YYYY-MM-DD HH:mm Z");
+  const transactionDateTimeFormatted = Moment.tz(formSubmissionPayment.paymentTransaction.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY hh:mm a (z)');
 
   console.log("formSubmissionPayment.paymentTransaction.transactionTime: ", formSubmissionPayment.paymentTransaction.transactionTime);
-  console.log("transactionTimeLocalWithOffset", transactionTimeLocalWithOffset);
+  console.log("transactionDateTimeFormatted", transactionDateTimeFormatted);
 
   // Prepare the data for the template
   const taxInvoiceData = {
@@ -93,7 +93,7 @@ async function generateTaxInvoice(
     receiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
     cardholderName: formSubmissionPayment.paymentTransaction.creditCard.cardholderName,
     cardNumberLast4digits: formSubmissionPayment.paymentTransaction.creditCard.maskedCardNumber4Digits.slice(-4),
-    transactionTime: transactionTimeLocalWithOffset,
+    transactionTime: transactionDateTimeFormatted,
     principalAmount: formSubmissionPayment.paymentTransaction.principalAmount.displayAmount,
     surchargeAmount: formSubmissionPayment.paymentTransaction.surchargeAmount.displayAmount,
     amountPaid: formSubmissionPayment.paymentTransaction.totalAmount.displayAmount,
