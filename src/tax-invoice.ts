@@ -52,7 +52,7 @@ async function generateTaxInvoice(
   const { ToFirstName, ToLastName,  ToBusinessName, ToAbn } = setTaxInvoiceToFields(submission)
 
   // new Date("2024-08-27T10:12:03+1000") => 2024-08-27 10:12:03 +10:00
-  const transactionDateTimeFormatted = Moment.tz(formSubmissionPayment.paymentTransaction.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY hh:mm a (z)');
+  const transactionDateTimeFormatted = Moment.tz(formSubmissionPayment.paymentTransaction.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY h:mm a (z)');
 
   console.log("formSubmissionPayment.paymentTransaction.transactionTime: ", formSubmissionPayment.paymentTransaction.transactionTime);
   console.log("transactionDateTimeFormatted", transactionDateTimeFormatted);
