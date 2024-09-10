@@ -18,6 +18,8 @@ import * as Logs from "./BfsLibrary/logs.mjs"
 
 import { primaryNswGovernmentLogo, getFormLinkAndImgQRCode, PartheniumWeedFormType } from "./templates/images.mjs"
 
+import Moment from 'moment-timezone';
+
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");
   // const data = {
@@ -163,7 +165,14 @@ const {
   let paymentAfterBorderCrossingTextWithHtml ;
   let figurePaymentAfterBorderCrossingQRCodeVisibility: 'visible' | 'hidden';
 
-  const paymentDoneTextWithHtml = `<p class="finePrint">This constitutes a (mini) Tax Invoice and receipt. Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo).</span></p>`
+  // const paymentDoneTextWithHtml = `<p>This constitutes a (mini) Tax Invoice and receipt. Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo).</span></p>`
+
+  let paymentRouteChecked_PayNowByCard_UserFilledRom;
+  let paymentRouteChecked_PayNowByCard_CertifierFilledRom;
+  let paymentRouteChecked_PayNowByCard_PayAfterBorderCrossing;
+  let paymentRouteChecked_PayNowByCard_NoPaymentRequired;
+
+  const checkedHtml = 'checked="checked"';
 
   switch (recordOfMovementAndInspection.PaymentRoute){
     case undefined:
@@ -171,30 +180,36 @@ const {
       if (recordOfMovementAndInspection.IsInspectorFillingRom === "Yes") {
         throw Boom.badData("Assertion failure. Expected recordOfMovementAndInspection.IsInspectorFillingRom to be no but was yes.: " + recordOfMovementAndInspection.IsInspectorFillingRom)
       }
-      paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
-      figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      // paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
+      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
 
       recordOfMovementAndInspection.PaymentRoute = 'Pay now by card - user filled ROM'
+      paymentRouteChecked_PayNowByCard_UserFilledRom = checkedHtml;
       break;
 
     case 'Pay now by card - certifier filled ROM':
-      paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
-      figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      // paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
+      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      paymentRouteChecked_PayNowByCard_CertifierFilledRom = checkedHtml;
       break;
 
     case 'Pay after border crossing':
-      paymentAfterBorderCrossingTextWithHtml = `<p class="finePrint">You must pay after the border crossing into NSW, within 7 days. Please click <a href="${paymentAfterBorderCrossingFormLink}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</p>`
-      figurePaymentAfterBorderCrossingQRCodeVisibility = 'visible'
+      // paymentAfterBorderCrossingTextWithHtml = `<p>You must pay after the border crossing into NSW, within 7 days. Please click <a href="${paymentAfterBorderCrossingFormLink}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</p>`
+      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'visible'
+      paymentRouteChecked_PayNowByCard_PayAfterBorderCrossing = checkedHtml;
       break;
 
     case 'No payment required':
-      paymentAfterBorderCrossingTextWithHtml = `<p class="finePrint">No payment is required. For example, because this is for the 2023 season when fees where waived in general.</p>`
-      figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      // paymentAfterBorderCrossingTextWithHtml = `<p>No payment is required. For example, because this is for the 2023 season when fees where waived in general.</p>`
+      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
+      paymentRouteChecked_PayNowByCard_NoPaymentRequired = checkedHtml;
       break;
 
     default: 
       throw Boom.badData("Unexpected recordOfMovementAndInspection.PaymentRoute case in switch: " + recordOfMovementAndInspection.PaymentRoute)
   }
+
+  const transactionDateFormatted = Moment.tz(formSubmissionPayment?.paymentTransaction?.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY');
   
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
     let certificateFields: CertificateFields = {
@@ -215,10 +230,15 @@ const {
       ApprovalFormSubmissionId: recordOfMovementAndInspection.ApprovalFormSubmissionId,
       EnvPrefix: recordOfMovementAndInspection.EnvPrefix,
       QRCodeImage: qrCodeImage,
+
       PaymentRoute: recordOfMovementAndInspection.PaymentRoute,
-      ReceiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
+      PaymentRouteChecked_PayNowByCard_UserFilledRom: paymentRouteChecked_PayNowByCard_UserFilledRom,
+      PaymentRouteChecked_PayNowByCard_CertifierFilledRom: paymentRouteChecked_PayNowByCard_CertifierFilledRom,
+      PaymentRouteChecked_PayNowByCard_PayAfterBorderCrossing: paymentRouteChecked_PayNowByCard_PayAfterBorderCrossing,
+      PaymentRouteChecked_PayNowByCard_NoPaymentRequired: paymentRouteChecked_PayNowByCard_NoPaymentRequired,
       
-      // to
+      ReceiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
+      TransactionDate: transactionDateFormatted,
       ToFirstName: ToFirstName,
       ToLastName: ToLastName,
       ToBusinessName: ToBusinessName,
@@ -226,6 +246,7 @@ const {
       AmountPaid: formSubmissionPayment?.paymentTransaction?.totalAmount.displayAmount,
       // CardholderName: formSubmissionPayment?.paymentTransaction?.creditCard.cardholderName,
 
+      PaymentAfterBorderCrossingFormLink: paymentAfterBorderCrossingFormLink,
       PaymentAfterBorderCrossingTextWithHtml: paymentAfterBorderCrossingTextWithHtml,
       PaymentAfterBorderCrossingFormLinkQRImg: paymentAfterBorderCrossingFormLinkQRImg,
       FigurePaymentAfterBorderCrossingQRCodeVisibility: figurePaymentAfterBorderCrossingQRCodeVisibility,
