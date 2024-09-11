@@ -163,14 +163,15 @@ const {
   const {formLinkPrefilled: paymentAfterBorderCrossingFormLink, imgHtml: paymentAfterBorderCrossingFormLinkQRImg } = getFormLinkAndImgQRCode(recordOfMovementAndInspection.PaperCertificateNumber, PartheniumWeedFormType.PaymentAfterBorderCrossing)
 
   let paymentAfterBorderCrossingTextWithHtml ;
-  let figurePaymentAfterBorderCrossingQRCodeVisibility: 'visible' | 'hidden';
 
   // const paymentDoneTextWithHtml = `<p>This constitutes a (mini) Tax Invoice and receipt. Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo).</span></p>`
 
   let paymentRouteChecked_PayNowByCard_UserFilledRom;
   let paymentRouteChecked_PayNowByCard_CertifierFilledRom;
-  let paymentRouteChecked_PayNowByCard_PayAfterBorderCrossing;
-  let paymentRouteChecked_PayNowByCard_NoPaymentRequired;
+  let paymentRouteChecked_PayAfterBorderCrossing;
+  let paymentRouteChecked_NoPaymentRequired;
+
+  let 
 
   const checkedHtml = 'checked="checked"';
 
@@ -181,7 +182,6 @@ const {
         throw Boom.badData("Assertion failure. Expected recordOfMovementAndInspection.IsInspectorFillingRom to be no but was yes.: " + recordOfMovementAndInspection.IsInspectorFillingRom)
       }
       // paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
-      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
 
       recordOfMovementAndInspection.PaymentRoute = 'Pay now by card - user filled ROM'
       paymentRouteChecked_PayNowByCard_UserFilledRom = checkedHtml;
@@ -189,20 +189,17 @@ const {
 
     case 'Pay now by card - certifier filled ROM':
       // paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
-      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
       paymentRouteChecked_PayNowByCard_CertifierFilledRom = checkedHtml;
       break;
 
     case 'Pay after border crossing':
       // paymentAfterBorderCrossingTextWithHtml = `<p>You must pay after the border crossing into NSW, within 7 days. Please click <a href="${paymentAfterBorderCrossingFormLink}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</p>`
-      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'visible'
-      paymentRouteChecked_PayNowByCard_PayAfterBorderCrossing = checkedHtml;
+      paymentRouteChecked_PayAfterBorderCrossing = checkedHtml;
       break;
 
     case 'No payment required':
       // paymentAfterBorderCrossingTextWithHtml = `<p>No payment is required. For example, because this is for the 2023 season when fees where waived in general.</p>`
-      // figurePaymentAfterBorderCrossingQRCodeVisibility = 'hidden'
-      paymentRouteChecked_PayNowByCard_NoPaymentRequired = checkedHtml;
+      paymentRouteChecked_NoPaymentRequired = checkedHtml;
       break;
 
     default: 
@@ -234,8 +231,8 @@ const {
       PaymentRoute: recordOfMovementAndInspection.PaymentRoute,
       PaymentRouteChecked_PayNowByCard_UserFilledRom: paymentRouteChecked_PayNowByCard_UserFilledRom,
       PaymentRouteChecked_PayNowByCard_CertifierFilledRom: paymentRouteChecked_PayNowByCard_CertifierFilledRom,
-      PaymentRouteChecked_PayNowByCard_PayAfterBorderCrossing: paymentRouteChecked_PayNowByCard_PayAfterBorderCrossing,
-      PaymentRouteChecked_PayNowByCard_NoPaymentRequired: paymentRouteChecked_PayNowByCard_NoPaymentRequired,
+      PaymentRouteChecked_PayAfterBorderCrossing: paymentRouteChecked_PayAfterBorderCrossing,
+      PaymentRouteChecked_NoPaymentRequired: paymentRouteChecked_NoPaymentRequired,
       
       ReceiptNumber: formSubmissionPayment?.paymentTransaction?.receiptNumber,
       TransactionDate: transactionDateFormatted,
