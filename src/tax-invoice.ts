@@ -172,8 +172,16 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: obje
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('Submission Data:', submission);
 
-  const attachments = await generateTaxInvoice(submission, formSubmissionPayments, formSubmissionMeta);
-  console.log("Webhook returning attachments ...", attachments);
-  return attachments
+  if (formSubmissionPayments) {
+    const attachments = await generateTaxInvoice(submission, formSubmissionPayments, formSubmissionMeta);
+    console.log("Webhook returning attachments ...", attachments);
+    return attachments
+  } else {
+    console.log("Webhook: No payments made, therefore no tax invoice to return.");
+    return {
+      "attachments": [] 
+    }
+  }
+
 };
   
