@@ -149,6 +149,8 @@
 
   header > .logo {
     width: 80px;
+    height: auto;
+    object-fit: cover;
     justify-self: end;
   }
 
@@ -320,6 +322,16 @@
     visibility: {{FigurePaymentAfterBorderCrossingQRCodeVisibility}};
   } */
 
+  #payNowByCard {
+    display: block;
+  }
+  #payAfterBorderCrossing {
+    display: block;
+  }
+  #noPaymentRequired {
+    display: none;
+  }
+
   .pageBreak {
     padding-top: var(--page-edge-space);
   }
@@ -336,12 +348,12 @@
 <body>
   <header>
     <div>
-      <h1>Carriers Biosecurity Certificate</h1>
+      <h1>Carrier Biosecurity Certificate</h1>
       <p><label for="PaperCertificateNumber">Paper certificate number</label><span class="fieldValue" id="PaperCertificateNumber">{{PaperCertificateNumber}}</span></p>
     </div>
 
-    <!-- <img class='logo' src="https://nswfoodauthority-parthenium-carrier-dev.cdn.oneblink.io/images/logos/PRIMARY-nsw-government-logo.svg" alt="Logo NSW Government. Development stub" />  -->
-    {{{Logo}}}
+    <img class='logo' src="https://nswfoodauthority-parthenium-carrier-dev.cdn.oneblink.io/images/logos/PRIMARY-nsw-government-logo.svg" alt="Logo NSW Government. Development stub" /> 
+    <!-- {{{Logo}}} -->
   </header>
 
   <main>
@@ -432,32 +444,31 @@
 
     <section>
       <h2>Privacy statement</h2>
-      <p>To enable this biosecurity certificate to be issued to you, the Department of Primary Industries (within the Department of Regional NSW) has asked you to provide personal information (such as your name, email or telephone number). We are unable to issue the certificate to you without this information. We may use and disclose your information as is reasonably necessary for the purpose of performing biosecurity risk functions under, or reasonably contemplated by, the NSW Biosecurity Act 2015. We will not otherwise disclose information about you to any person except where permitted by law. If you would like to gain access to, or amend your personal information, or require more details about privacy please contact us <a href="mailto:gipa@regional.nsw.gov.auu">gipa@regional.nsw.gov.au</a></p>
+      <p>To enable this biosecurity certificate to be issued to you, the Department of Primary Industries and Regional Development (DPIRD) has asked you to provide personal information (such as your name, email or telephone number). We are unable to issue the certificate to you without this information. We may use and disclose your information as is reasonably necessary for the purpose of performing biosecurity risk functions under, or reasonably contemplated by, the NSW Biosecurity Act 2015. We will not otherwise disclose information about you to any person except where permitted by law. If you would like to gain access to, or amend your personal information, or require more details about privacy please contact us <a href="mailto:gipa@dpird.nsw.gov.au">gipa@dpird.nsw.gov.au</a></p>
     </section>
 
     <!-- <h1 class="pageBreak">
-      Carriers Biosecurity Certificate: <br /> 
+      Carrier Biosecurity Certificate: <br /> 
       Additional Information
     </h1> -->
 
     <header class="pageBreak">
       <div>
         <h1>
-          Carriers Biosecurity Certificate: <br /> 
+          Carrier Biosecurity Certificate: <br /> 
           Additional Information
         </h1>
       </div>
   
-      <!-- <img class='logo' src="https://nswfoodauthority-parthenium-carrier-dev.cdn.oneblink.io/images/logos/PRIMARY-nsw-government-logo.svg" alt="Logo NSW Government. Development stub" />  -->
-      {{{Logo}}}
+      <img class='logo' src="https://nswfoodauthority-parthenium-carrier-dev.cdn.oneblink.io/images/logos/PRIMARY-nsw-government-logo.svg" alt="Logo NSW Government. Development stub" /> 
+      <!-- {{{Logo}}} -->
     </header>
 
     <section id="payment">
       <h2>Payment</h2>
-      <p>Payment route: <span class="fieldValue">{{PaymentRoute}}</span></p>
       <fieldset>
         <!-- <legend>Payment route</legend> -->
-        <div>
+        <div id="payNowByCard">
           <label><input type="checkbox" name="PaymentRoute[]" value="Pay now by card - user filled ROM" {{{PaymentRouteChecked_PayNowByCard_UserFilledRom}}} />Pay now by card - user filled ROM</label>
           <label><input type="checkbox" name="PaymentRoute[]" value="Pay now by card - certifier filled ROM" {{{PaymentRouteChecked_PayNowByCard_CertifierFilledRom}}} />Pay now by card - certifier filled ROM</label>
           <div>
@@ -497,9 +508,9 @@
             </table> -->
           
           </div>
-          <p>Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement. <span class="todo">For a refund ... (todo).</span></p>
+          <p>Amount paid is GST-free and includes card surcharge. A detailed Tax Invoice was emailed to the responsible person or owner if they provided an email with the Record of Movement.</p>
         </div>
-        <div>
+        <div id="payAfterBorderCrossing">
           <label><input type="checkbox" name="PaymentRoute[]" value="Pay after border crossing"  {{{PaymentRouteChecked_PayNowByCard_PayAfterBorderCrossing}}} />Pay after border crossing</label>
           <div class="withQRCode">
             <p>You must pay after the border crossing into NSW, within 7 days. Please click <a href="{{PaymentAfterBorderCrossingFormLink}}">Parthenium Weed Carriers - Biosecurity Certificate - Payment after Border Crossing</a>, or scan the QR code. Either will fill the form with your unique "Paper certificate number".</p>
@@ -511,7 +522,7 @@
             <!-- {{{PaymentAfterBorderCrossingTextWithHtml}}} -->
           </div>
         </div>
-        <div>
+        <div id="noPaymentRequired">
         <label><input type="checkbox" name="PaymentRoute[]" value="No payment required"  {{{PaymentRouteChecked_PayNowByCard_NoPaymentRequired}}} />No payment required</label>
           <p>No payment is required. For example, because this is for the 2023 season when fees where waived.</p>
         </div>
@@ -556,6 +567,9 @@ when we tie it to a digital record).</p>
                We use the hex value because we are using Polyglot XHTML  -->
           <td><label for="EnvPrefix">EnvPrefix</label><br /><span class="fieldValue" id="EnvPrefix">{{EnvPrefix}}&#x00A0;</span></td>
           <td><label for="CertificateTemplateVersion">CertificateTemplateVersion</label><br /><span class="fieldValue" id="CertificateTemplateVersion">v20240905-1430</span></td>
+        </tr>
+        <tr>
+          <td><label for="PaymentRoute">PaymentRoute</label><br /><span class="fieldValue" id="PaymentRoute">{{PaymentRoute}}</span></td>
         </tr>
       </table>        
     </section>
