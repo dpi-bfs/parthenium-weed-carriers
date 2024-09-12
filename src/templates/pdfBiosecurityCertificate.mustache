@@ -323,13 +323,13 @@
   } */
 
   #payNowByCard {
-    display: block;
+    display: {{PaymentRouteSubsectionVisibility_PayNowByCard}};
   }
   #payAfterBorderCrossing {
-    display: block;
+    display: {{PaymentRouteSubsectionVisibility_PayAfterBorderCrossing}};
   }
   #noPaymentRequired {
-    display: none;
+    display: {{PaymentRouteSubsectionVisibility_NoPaymentRequired}};
   }
 
   .pageBreak {
@@ -566,7 +566,7 @@ when we tie it to a digital record).</p>
           <!-- We include the non-breaking space to prevent the fieldValue inline-block from collapsing when in the PROD environment, which returns blank. 
                We use the hex value because we are using Polyglot XHTML  -->
           <td><label for="EnvPrefix">EnvPrefix</label><br /><span class="fieldValue" id="EnvPrefix">{{EnvPrefix}}&#x00A0;</span></td>
-          <td><label for="CertificateTemplateVersion">CertificateTemplateVersion</label><br /><span class="fieldValue" id="CertificateTemplateVersion">v20240905-1430</span></td>
+          <td><label for="CertificateTemplateVersion">CertificateTemplateVersion</label><br /><span class="fieldValue" id="CertificateTemplateVersion">v20240912-1128</span></td>
         </tr>
         <tr>
           <td><label for="PaymentRoute">PaymentRoute</label><br /><span class="fieldValue" id="PaymentRoute">{{PaymentRoute}}</span></td>
