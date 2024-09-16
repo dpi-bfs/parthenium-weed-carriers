@@ -122,7 +122,7 @@ export interface RecordOfMovementAndInspection extends
   BaseFormSubmissionProjectSpecific, 
   ApprovalFormSubmissionProjectSpecific, 
   FormApprovalFlowInstanceSubset,
-  PaymentDataToDatabase,
-  ExtraData 
+  ExtraData, 
+  PaymentDataToDatabase
   {
   }
