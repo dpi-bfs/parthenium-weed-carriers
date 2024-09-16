@@ -10,7 +10,7 @@ import { setTaxInvoiceToFields } from "./localLibrary/set-tax-invoice-to-fields.
 import * as StringTools from "./BfsLibrary/stringTools.mjs";
 import * as DateTimeTools from "./BfsLibrary/dateTime.mjs"
 
-import { CertificateFields, FormApprovalFlowInstanceSubset } from "./projectTypes.js";
+import { CertificateFields, FormApprovalFlowInstanceSubset, PaymentDataToDatabase } from "./projectTypes.js";
 import *  as SendPostRequest from "./BfsLibrary/sendPostRequest.mjs"
 
 import * as Base64Tools from "./localLibrary/base64Tools.mjs"
@@ -22,18 +22,6 @@ import Moment from 'moment-timezone';
 
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("Posting data to power automate");
-  // const data = {
-  //   PowerAuto  mateSecretKey: process.env.POWER_AUTOMATE_SECRET_KEY,
-  //   ExternalId: certificateFields.ExternalId,
-  //   FoodHandlerName: certificateFields.FoodHandlerName,
-  //   FoodHandlerEmail: certificateFields.FoodHandlerEmail,
-  //   SubmissionId: certificateFields.SubmissionId,
-  //   SubmissionUtcDateTime: req.body.submissionTimestamp,
-  //   SubmissionLocalDateTime: certificateFields.SubmissionLocalDateTime,
-  //   FormId: req.body.formId,
-  //   Pdf: pdf.toString('base64')
-  // }
-  // console.log("data", data);
   const data = recordOfMovementAndInspection;
 
   await SendPostRequest.sendPostRequest(data, process.env.POWER_AUTOMATE_HTTP_POST_URL!);  
@@ -61,6 +49,15 @@ interface Response {
   setStatusCode(code: number): void;
   setHeader(name: string, value: string): void;
   setPayload(payload: { [key: string]: any }): void;
+}
+
+function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection, formSubmissionPayment) {
+  const paymentDataToDatabase: PaymentDataToDatabase = {
+    PaymentAddedViaFormID: recordOfMovementAndInspection.BaseFormId,
+    PaymentAddedViaFormTrackingCode: recordOfMovementAndInspection.trackingCode,
+  }
+
+  return paymentDataToDatabase;
 }
 
 export let post = async function webhook(req: OneBlinkHelpers.Request, res: Response) {
@@ -108,7 +105,9 @@ const {
     BiosecurityCertificatePdf: ""
   }
 
-  const recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection = {
+
+  // We need to add paymentDataToDatabase later.
+  let recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection = {
     ...baseFormSubmission,
     ...approvalFormSubmission,
     ...formApprovalFlowInstanceSubset,
@@ -269,6 +268,9 @@ const {
 
     recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
   }
+
+  // Adds PaymentDataToDatabase to recordOfMovementAndInspection
+  recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment)};
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) {
     console.log("******* ID Block Start ********")

@@ -46,7 +46,7 @@ export interface CertificateFields {
   PaymentAfterBorderCrossingFormLink: string,
   PaymentAfterBorderCrossingFormLinkQRImg: string,
   PaymentAfterBorderCrossingTextWithHtml: string | undefined,
-  FigurePaymentAfterBorderCrossingQRCodeVisibility: 'visible' | 'hidden',
+  // FigurePaymentAfterBorderCrossingQRCodeVisibility: 'visible' | 'hidden',
   NswDestinationsNotificationFormLink: string,
   NswDestinationsNotificationFormLinkQRImg: string,
 }
@@ -94,6 +94,11 @@ export interface FormApprovalFlowInstanceSubset {
   ApprovalFlowUpdatedAt: string
 }
 
+export interface PaymentDataToDatabase {
+  PaymentAddedViaFormID: number,
+  PaymentAddedViaFormTrackingCode: string,
+}
+
 export interface ExtraData {
   EnvPrefix: string,
   PowerAutomateSecretKey: string,
@@ -104,6 +109,7 @@ export interface RecordOfMovementAndInspection extends
   BaseFormSubmissionProjectSpecific, 
   ApprovalFormSubmissionProjectSpecific, 
   FormApprovalFlowInstanceSubset,
+  PaymentDataToDatabase,
   ExtraData 
   {
   }
