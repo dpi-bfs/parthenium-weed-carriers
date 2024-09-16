@@ -51,10 +51,34 @@ interface Response {
   setPayload(payload: { [key: string]: any }): void;
 }
 
-function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection, formSubmissionPayment) {
-  const paymentDataToDatabase: PaymentDataToDatabase = {
-    PaymentAddedViaFormID: recordOfMovementAndInspection.BaseFormId,
-    PaymentAddedViaFormTrackingCode: recordOfMovementAndInspection.trackingCode,
+function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection, 
+                                  formSubmissionPayment, 
+                                  ToFirstName: string, 
+                                  ToLastName: string, 
+                                  ToBusinessName: string | undefined,
+                                  ToAbn: string | undefined
+                                  ) {
+
+ let paymentDataToDatabase: PaymentDataToDatabase = {};
+
+  if (formSubmissionPayment) {
+    paymentDataToDatabase = {
+      PaymentAddedViaFormID: recordOfMovementAndInspection.BaseFormId,
+      PaymentAddedViaFormTrackingCode: recordOfMovementAndInspection.trackingCode,
+      TaxInvoiceToFirstName: ToFirstName,
+      TaxInvoiceToLastName: ToLastName,
+      TaxInvoiceToAbn: ToAbn,
+      TaxInvoiceToBusinessName: ToBusinessName,
+      BiosecurityCertificateFee: recordOfMovementAndInspection.BiosecurityCertificateFee,
+      SubmissionPaymentStatus: formSubmissionPayment.paymentTransaction.status,
+      SubmissionPaymentResponseCode: formSubmissionPayment.paymentTransaction.responseCode,
+      SubmissionPaymentResponseDescription: formSubmissionPayment.paymentTransaction.responseDescription,
+      SubmissionPaymentReceiptNumber: formSubmissionPayment.paymentTransaction.receiptNumber,
+      SubmissionPaymentTransactionDateTime: formSubmissionPayment.paymentTransaction.transactionTime,
+      SubmissionPaymentPrincipalAmount: formSubmissionPayment.paymentTransaction.principalAmount.amount,
+      SubmissionPaymentSurchargeAmount: formSubmissionPayment.paymentTransaction.surchargeAmount.amount,
+      SubmissionPaymentTotalAmount: formSubmissionPayment.paymentTransaction.totalAmount.amount
+    }
   }
 
   return paymentDataToDatabase;
@@ -149,10 +173,11 @@ const {
   let ToFirstName;
   let ToLastName;
   let ToBusinessName;
+  let ToAbn; 
 
   if (formSubmissionPayments && formSubmissionPayments[0]) {
     formSubmissionPayment = formSubmissionPayments[0];
-    ({ ToFirstName, ToLastName, ToBusinessName } = setTaxInvoiceToFields(baseFormSubmission))
+    ({ ToFirstName, ToLastName, ToBusinessName, ToAbn } = setTaxInvoiceToFields(baseFormSubmission))
   }
 
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
@@ -213,6 +238,11 @@ const {
       throw Boom.badData("Unexpected recordOfMovementAndInspection.PaymentRoute case in switch: " + recordOfMovementAndInspection.PaymentRoute)
   }
 
+  if (formSubmissionPayment && formSubmissionPayments && formSubmissionPayments[0]) {
+    // Adds PaymentDataToDatabase to recordOfMovementAndInspection
+    recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment, ToFirstName, ToLastName, ToBusinessName, ToAbn)};
+  }
+
   const transactionDateFormatted = Moment.tz(formSubmissionPayment?.paymentTransaction?.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY');
   
   if (recordOfMovementAndInspection.InspectionResult.startsWith("Passed")) {
@@ -268,9 +298,6 @@ const {
 
     recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
   }
-
-  // Adds PaymentDataToDatabase to recordOfMovementAndInspection
-  recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment)};
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) {
     console.log("******* ID Block Start ********")

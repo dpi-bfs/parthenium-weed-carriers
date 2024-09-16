@@ -5,6 +5,8 @@ export function setTaxInvoiceToFields(submission) {
   let toFirstName
   let toLastName
   let toAbn 
+  let toBusinessName: string | undefined;
+
 
   if (submission.TaxInvoiceTo.includes("Person responsible")) {
     toFirstName = submission.PersonResponsibleFirstName
@@ -41,7 +43,7 @@ export function setTaxInvoiceToFields(submission) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`222 toFirstName ${toFirstName}`);
 
   let formatAbnWithSpaces 
-  let toBusinessName
+  
   if (toAbn) {
     formatAbnWithSpaces = "ABN: " + new Intl.NumberFormat('en-AU').format(toAbn.ABN.identifierValue).replace(/,/g, ' ');
     toBusinessName = toAbn.mainName.organisationName

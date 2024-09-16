@@ -97,6 +97,19 @@ export interface FormApprovalFlowInstanceSubset {
 export interface PaymentDataToDatabase {
   PaymentAddedViaFormID: number,
   PaymentAddedViaFormTrackingCode: string,
+  TaxInvoiceToFirstName: string,
+  TaxInvoiceToLastName: string,
+  TaxInvoiceToAbn: string | undefined,
+  TaxInvoiceToBusinessName: string | undefined,
+  BiosecurityCertificateFee: number,
+  SubmissionPaymentStatus: string,
+  SubmissionPaymentResponseCode: string,
+  SubmissionPaymentResponseDescription: string,
+  SubmissionPaymentReceiptNumber: string,
+  SubmissionPaymentTransactionDateTime: Date,
+  SubmissionPaymentPrincipalAmount: number,
+  SubmissionPaymentSurchargeAmount: number,
+  SubmissionPaymentTotalAmount: number
 }
 
 export interface ExtraData {
