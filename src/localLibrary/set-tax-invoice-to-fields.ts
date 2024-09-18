@@ -7,6 +7,7 @@ export function setTaxInvoiceToFields(submission) {
   let toAbn 
   let toBusinessName: string | undefined;
 
+  console.log(`setTaxInvoiceToFields Logs.LogLevel : ${Logs.LogLevel}`)
 
   if (submission.TaxInvoiceTo.includes("Person responsible")) {
     toFirstName = submission.PersonResponsibleFirstName
@@ -17,20 +18,22 @@ export function setTaxInvoiceToFields(submission) {
 
   } else if (submission.TaxInvoiceTo.includes("Owner")) {
 
-    if (submission.Owner?.includes("Another person")) {
+    if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`submission.Owner?.includes("Person responsible")`, submission.Owner?.includes("Person responsible"));
+    
+    if (submission.Owner?.includes("Person responsible")) {
       toFirstName = submission.PersonResponsibleFirstName
       toLastName = submission.PersonResponsibleLastName
       
-    } else if (submission.OwnerFirstName){
+    } else if (submission.Owner?.includes("Another person")){
       toFirstName = submission.OwnerFirstName
       toLastName = submission.OwnerLastName
 
     } else {
-      throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination:' +
-           ` TaxInvoiceTo: ${submission.TaxInvoiceTo};` +
-           ` Owner: ${submission.Owner};` +
-           ` PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName};` +
-           ` OwnerFirstName: ${submission.OwnerFirstName};`
+      throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination: \\r\\n' +
+           ` * TaxInvoiceTo: ${submission.TaxInvoiceTo}; \\r\\n` +
+           ` * Owner: ${submission.Owner}; \\r\\n` +
+           ` * PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName}; \\r\\n` +
+           ` * OwnerFirstName: ${submission.OwnerFirstName};`
           );
     }
 
