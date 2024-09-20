@@ -1,11 +1,4 @@
-import * as OneBlinkHelpers from "./BfsLibrary/oneblinkSdkHelpers.mjs";
-import * as OneBlink from "@oneblink/sdk"
 import * as Logs from "./BfsLibrary/logs.mjs"
-
-export const formsSDK = new OneBlink.Forms({
-  accessKey: process.env.FORMS_ACCESS_KEY!,
-  secretKey: process.env.FORMS_SECRET_KEY!,
-});
 
 interface Response {
   setStatusCode(code: number): void;
@@ -17,13 +10,15 @@ export let post = async function webhook(req: object, res: Response) {
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("In form-level-validation");
 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("req", req);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("req", JSON.stringify(req, null, 2));
 
   let submission = req.body.submission
 
   var carriers = submission.Carriers || [];
 
-  var itemCount = carriers.length;
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("carriers", JSON.stringify(carriers, null, 2));
+
+  var carriersItemCount = carriers.length;
 
   function isValidCarrierType(type) {
     return type === 1 || type === 2;
@@ -32,14 +27,16 @@ export let post = async function webhook(req: object, res: Response) {
   var isValid = false;
   var errorMessage = "";
 
-  if (itemCount === 1) {
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("carriersItemCount", carriersItemCount);
+
+  if (carriersItemCount === 1) {
     var carrierType = Number(carriers[0].CarrierType);
     if (isValidCarrierType(carrierType)) {
       isValid = true;
     } else {
       errorMessage = "Invalid carrier type. Carrier type must be 1 or 2.";
     }
-  } else if (itemCount === 2) {
+  } else if (carriersItemCount === 2) {
     var carrierType1 = Number(carriers[0].CarrierType);
     var carrierType2 = Number(carriers[1].CarrierType);
 
@@ -56,7 +53,9 @@ export let post = async function webhook(req: object, res: Response) {
     errorMessage = "Please select either one carrier, or two carriers with different types.";
   }
 
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("isValid", isValid);
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("About to return from form-level-validation");
+  
   if (isValid) {
     return res.setStatusCode(200)
   } else {
