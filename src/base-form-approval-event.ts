@@ -55,11 +55,13 @@ function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.Re
                                   formSubmissionPayment, 
                                   ToFirstName: string, 
                                   ToLastName: string, 
+                                  ToPhone: string,
+                                  ToEmail: string | undefined,
                                   ToBusinessName: string | undefined,
                                   ToAbn: string | undefined
                                   ) {
 
- let paymentDataToDatabase: PaymentDataToDatabase = {};
+ let paymentDataToDatabase!: PaymentDataToDatabase;
 
   if (formSubmissionPayment) {
     paymentDataToDatabase = {
@@ -67,6 +69,8 @@ function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.Re
       PaymentAddedViaFormTrackingCode: recordOfMovementAndInspection.trackingCode,
       TaxInvoiceToFirstName: ToFirstName,
       TaxInvoiceToLastName: ToLastName,
+      TaxInvoiceToPhone: ToPhone,
+      TaxInvoiceToEmail: ToEmail,
       TaxInvoiceToAbn: ToAbn,
       TaxInvoiceToBusinessName: ToBusinessName,
       BiosecurityCertificateFee: recordOfMovementAndInspection.BiosecurityCertificateFee,
@@ -172,12 +176,14 @@ const {
   let formSubmissionPayment;
   let ToFirstName;
   let ToLastName;
+  let ToPhone;
+  let ToEmail;
   let ToBusinessName;
   let ToAbn; 
 
   if (formSubmissionPayments && formSubmissionPayments[0]) {
     formSubmissionPayment = formSubmissionPayments[0];
-    ({ ToFirstName, ToLastName, ToBusinessName, ToAbn } = setTaxInvoiceToFields(baseFormSubmission))
+    ({ ToFirstName, ToLastName, ToPhone, ToEmail, ToBusinessName, ToAbn } = setTaxInvoiceToFields(baseFormSubmission))
   }
 
   const ApprovalFlowUpdatedAtLocal = DateTimeTools.formatDateCustom(recordOfMovementAndInspection.ApprovalFlowUpdatedAt, 'Australia/Sydney')
@@ -240,7 +246,7 @@ const {
 
   if (formSubmissionPayment && formSubmissionPayments && formSubmissionPayments[0]) {
     // Adds PaymentDataToDatabase to recordOfMovementAndInspection
-    recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment, ToFirstName, ToLastName, ToBusinessName, ToAbn)};
+    recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment, ToFirstName, ToLastName, ToPhone, ToEmail, ToBusinessName, ToAbn)};
   }
 
   const transactionDateFormatted = Moment.tz(formSubmissionPayment?.paymentTransaction?.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY');

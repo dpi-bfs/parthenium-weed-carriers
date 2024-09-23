@@ -99,6 +99,8 @@ export interface PaymentDataToDatabase {
   PaymentAddedViaFormTrackingCode: string,
   TaxInvoiceToFirstName: string,
   TaxInvoiceToLastName: string,
+  TaxInvoiceToPhone: string,
+  TaxInvoiceToEmail: string | undefined,
   TaxInvoiceToAbn: string | undefined,
   TaxInvoiceToBusinessName: string | undefined,
   BiosecurityCertificateFee: number,

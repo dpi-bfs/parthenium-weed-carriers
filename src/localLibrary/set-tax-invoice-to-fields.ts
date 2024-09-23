@@ -4,6 +4,8 @@ import * as Logs from "../BfsLibrary/logs.mjs"
 export function setTaxInvoiceToFields(submission) {
   let toFirstName
   let toLastName
+  let toPhone
+  let toEmail
   let toAbn 
   let toBusinessName: string | undefined;
 
@@ -12,6 +14,8 @@ export function setTaxInvoiceToFields(submission) {
   if (submission.TaxInvoiceTo.includes("Person responsible")) {
     toFirstName = submission.PersonResponsibleFirstName
     toLastName = submission.PersonResponsibleLastName
+    toPhone = submission.PersonResponsibleMobilePhone
+    toEmail = submission.PersonResponsibleEmail
     toAbn = submission.PersonResponsibleAbn
 
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`111 toFirstName ${toFirstName}`);
@@ -23,10 +27,14 @@ export function setTaxInvoiceToFields(submission) {
     if (submission.Owner?.includes("Person responsible")) {
       toFirstName = submission.PersonResponsibleFirstName
       toLastName = submission.PersonResponsibleLastName
+      toPhone = submission.PersonResponsibleMobilePhone
+      toEmail = submission.PersonResponsibleEmail
       
     } else if (submission.Owner?.includes("Another person")){
       toFirstName = submission.OwnerFirstName
       toLastName = submission.OwnerLastName
+      toPhone = submission.OwnerPhone
+      toEmail = submission.OwnerEmail
 
     } else {
       throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination: \\r\\n' +
@@ -57,6 +65,8 @@ export function setTaxInvoiceToFields(submission) {
   return {
     ToFirstName: toFirstName,
     ToLastName: toLastName,
+    ToPhone: toPhone,
+    ToEmail: toEmail,
     ToBusinessName: toBusinessName,
     ToAbn: formatAbnWithSpaces,
   }
