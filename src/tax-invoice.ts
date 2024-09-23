@@ -1,4 +1,3 @@
-import { generatePdfHtmlTaxInvoice } from "./templates/index.mjs";
 import { setTaxInvoiceToFields } from "./localLibrary/set-tax-invoice-to-fields.js";
 import Boom from "@hapi/boom";
 import OneBlink from '@oneblink/sdk';
@@ -26,7 +25,7 @@ const pdfSDK = new OneBlink.PDF({
 
 
 // Function to generate the Tax Invoice PDF, as Buffer (not Base64)
-async function getTaxInvoicePdf(
+export async function getTaxInvoicePdf(
       submission, 
       formSubmissionPayments, 
       formSubmissionMeta: OneBlinkTypes.SubmissionTypes.FormSubmissionMeta

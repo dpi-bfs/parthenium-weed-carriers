@@ -6,6 +6,7 @@ import { FormApprovalFlowInstance } from "@oneblink/types/typescript/approvals.j
 
 import * as OneBlinkToMailgun  from "./localLibrary/oneBlinkToMailgun.mjs";
 import { setTaxInvoiceToFields } from "./localLibrary/set-tax-invoice-to-fields.js";
+import * as TaxInvoice from "./tax-invoice.js"
 
 import * as StringTools from "./BfsLibrary/stringTools.mjs";
 import * as DateTimeTools from "./BfsLibrary/dateTime.mjs"
@@ -171,7 +172,7 @@ const {
   const certificateInForceExpiryDateTimeCustom = DateTimeTools.formatDateCustom(certificateInForceExpiryDateTimeLocalIso, 'Australia/Sydney');
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateInForceExpiryDateTimeCustom", certificateInForceExpiryDateTimeCustom);
 
-  const { formSubmissionPayments } = await OneBlinkHelpers.formsSDK.getFormSubmissionMeta(req.body.submissionId)
+  const { formSubmissionMeta, formSubmissionPayments } = await OneBlinkHelpers.formsSDK.getFormSubmissionMeta(req.body.submissionId)
 
   let formSubmissionPayment;
   let ToFirstName;
@@ -247,6 +248,8 @@ const {
   if (formSubmissionPayment && formSubmissionPayments && formSubmissionPayments[0]) {
     // Adds PaymentDataToDatabase to recordOfMovementAndInspection
     recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment, ToFirstName, ToLastName, ToPhone, ToEmail, ToBusinessName, ToAbn)};
+    const pdfBuffer = await TaxInvoice.getTaxInvoicePdf(baseFormSubmission, formSubmissionPayments, formSubmissionMeta)
+    recordOfMovementAndInspection.TaxInvoicePdf = pdfBuffer.toString('base64');
   }
 
   const transactionDateFormatted = Moment.tz(formSubmissionPayment?.paymentTransaction?.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY');
@@ -302,7 +305,7 @@ const {
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields is an object that stores the fields for the certificate only. They aren't directly passed on to the database. What gets passed on is recordOfMovementAndInspection")
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log("certificateFields", certificateFields);
 
-    recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail);
+    recordOfMovementAndInspection.BiosecurityCertificatePdf = await OneBlinkToMailgun.sendMail(certificateFields, recordOfMovementAndInspection.InspectorEmail)
   }
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) {

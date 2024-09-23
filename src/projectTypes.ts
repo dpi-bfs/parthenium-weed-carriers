@@ -117,7 +117,8 @@ export interface PaymentDataToDatabase {
 export interface ExtraData {
   EnvPrefix: string,
   PowerAutomateSecretKey: string,
-  BiosecurityCertificatePdf: string
+  BiosecurityCertificatePdf: string,
+  TaxInvoicePdf: string | undefined
 }
 
 export interface RecordOfMovementAndInspection extends 
