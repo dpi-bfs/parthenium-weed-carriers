@@ -25,12 +25,12 @@ const pdfSDK = new OneBlink.PDF({
 });
 
 
-// Function to generate the Tax Invoice PDF
-async function generateTaxInvoice(
+// Function to generate the Tax Invoice PDF, as Buffer (not Base64)
+async function getTaxInvoicePdf(
       submission, 
       formSubmissionPayments, 
       formSubmissionMeta: OneBlinkTypes.SubmissionTypes.FormSubmissionMeta
-    ) {
+    ): Promise<Buffer> {
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments in generateTaxInvoice:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments[0] in generateTaxInvoice:', JSON.stringify(formSubmissionPayments[0], null, 2));
@@ -111,8 +111,12 @@ async function generateTaxInvoice(
     },
   });
 
+  return pdf
+}
+
+async function getTaxInvoiceAsEmailAttachment(pdf: Buffer, digitalReferenceCode: string, receiptNumber: string){
   const emailAttachment = await formsSDK.uploadEmailAttachment({
-    filename: `TaxInvoice-${taxInvoiceData.formDigitalReferenceCode}-${taxInvoiceData.receiptNumber}.pdf`,
+    filename: `TaxInvoice-${digitalReferenceCode}-${receiptNumber}.pdf`,
     contentType: 'application/pdf',
     body: pdf,
   })
@@ -173,7 +177,8 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: obje
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('Submission Data:', submission);
 
   if (formSubmissionPayments) {
-    const attachments = await generateTaxInvoice(submission, formSubmissionPayments, formSubmissionMeta);
+    const pdf = await getTaxInvoicePdf(submission, formSubmissionPayments, formSubmissionMeta);
+    const attachments = await getTaxInvoiceAsEmailAttachment(pdf, submission.trackingCode, formSubmissionPayments[0]?.paymentTransaction?.receiptNumber);
     console.log("Webhook returning attachments ...", attachments);
     return attachments
   } else {
