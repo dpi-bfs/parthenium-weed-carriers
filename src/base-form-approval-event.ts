@@ -256,7 +256,7 @@ const {
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason", recordOfMovementAndInspection.PaymentRouteReason)
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')", recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other'))
   if (recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')) {
-    recordOfMovementAndInspection.PaymentRouteReason += " - " + recordOfMovementAndInspection.PaymentRouteReason
+    recordOfMovementAndInspection.PaymentRouteReason += " - " + recordOfMovementAndInspection.PaymentRouteReasonOther
   }
 
   const transactionDateFormatted = Moment.tz(formSubmissionPayment?.paymentTransaction?.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY');
