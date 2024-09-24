@@ -62,7 +62,11 @@ function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.Re
                                   ToAbn: string | undefined
                                   ) {
 
- let paymentDataToDatabase!: PaymentDataToDatabase;
+  let paymentDataToDatabase!: PaymentDataToDatabase;
+
+  if (recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')) {
+    recordOfMovementAndInspection.PaymentRouteReason += recordOfMovementAndInspection.PaymentRouteReasonOther
+  }
 
   if (formSubmissionPayment) {
     paymentDataToDatabase = {

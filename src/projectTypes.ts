@@ -29,6 +29,7 @@ export interface CertificateFields {
   EnvPrefix: string,
   QRCodeImage: string // Base64 image.
   PaymentRoute: string,
+  PaymentRouteReason: string,
   PaymentRouteChecked_PayNowByCard_UserFilledRom: string | undefined,
   PaymentRouteChecked_PayNowByCard_CertifierFilledRom: string | undefined,
   PaymentRouteChecked_PayAfterBorderCrossing: string | undefined,
@@ -71,6 +72,8 @@ export interface BaseFormSubmissionProjectSpecific extends OneBlinkHelpers.BaseF
   InspectorFillingRom: string,  
   Carriers: Carrier[],
   PaymentRoute: string,
+  PaymentRouteReason: string,
+  PaymentRouteReasonOther: string | undefined,
   TaxInvoiceTo: string,
 }
 
