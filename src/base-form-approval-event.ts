@@ -64,9 +64,6 @@ function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.Re
 
   let paymentDataToDatabase!: PaymentDataToDatabase;
 
-  if (recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')) {
-    recordOfMovementAndInspection.PaymentRouteReason += recordOfMovementAndInspection.PaymentRouteReasonOther
-  }
 
   if (formSubmissionPayment) {
     paymentDataToDatabase = {
@@ -254,6 +251,12 @@ const {
     recordOfMovementAndInspection = { ...recordOfMovementAndInspection,  ...getPaymentDataToDatabase(recordOfMovementAndInspection, formSubmissionPayment, ToFirstName, ToLastName, ToPhone, ToEmail, ToBusinessName, ToAbn)};
     const pdfBuffer = await TaxInvoice.getTaxInvoicePdf(baseFormSubmission, formSubmissionPayments, formSubmissionMeta)
     recordOfMovementAndInspection.TaxInvoicePdf = pdfBuffer.toString('base64');
+  }
+
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason", recordOfMovementAndInspection.PaymentRouteReason)
+  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')", recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other'))
+  if (recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')) {
+    recordOfMovementAndInspection.PaymentRouteReason += " - " + recordOfMovementAndInspection.PaymentRouteReason
   }
 
   const transactionDateFormatted = Moment.tz(formSubmissionPayment?.paymentTransaction?.transactionTime, 'Australia/Sydney').format('DD/MM/YYYY');
