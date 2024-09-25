@@ -24,23 +24,50 @@ export function setTaxInvoiceToFields(submission) {
 
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`submission.Owner?.includes("Person responsible")`, submission.Owner?.includes("Person responsible"));
     
-    if (submission.Owner?.includes("Person responsible")) {
-      toFirstName = submission.PersonResponsibleFirstName
-      toLastName = submission.PersonResponsibleLastName
-      toPhone = submission.PersonResponsibleMobilePhone
-      toEmail = submission.PersonResponsibleEmail
-      
-    } else if (submission.Owner?.includes("Another person")){
-      toFirstName = submission.OwnerFirstName
-      toLastName = submission.OwnerLastName
-      toPhone = submission.OwnerPhone
-      toEmail = submission.OwnerEmail
+    // From ROM Form
+    if (submission.Owner) {
+      if (submission.Owner?.includes("Person responsible")) {
+        toFirstName = submission.PersonResponsibleFirstName
+        toLastName = submission.PersonResponsibleLastName
+        toPhone = submission.PersonResponsibleMobilePhone
+        toEmail = submission.PersonResponsibleEmail
+        
+      } else if (submission.Owner?.includes("Another person")){
+        toFirstName = submission.OwnerFirstName
+        toLastName = submission.OwnerLastName
+        toPhone = submission.OwnerPhone
+        toEmail = submission.OwnerEmail
+      } else {
+        throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination, under submission.Owner:' +
+          ` * TaxInvoiceTo: ${submission.TaxInvoiceTo};` +
+          ` * Owner: ${submission.Owner};` +
+          ` * PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName};` +
+          ` * OwnerFirstName: ${submission.OwnerFirstName};`
+         );
+      }
 
+    // From Payment after border crossing form
+    } else if (submission.Owner == null) {
+
+      if (submission.OwnerFirstName) {
+        toFirstName = submission.OwnerFirstName
+        toLastName = submission.OwnerLastName
+        toPhone = submission.OwnerPhone
+        toEmail = submission.OwnerEmail
+      } else {
+        throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination, under if (submission.OwnerFirstName) :' +
+          ` * TaxInvoiceTo: ${submission.TaxInvoiceTo};` +
+          ` * Owner: ${submission.Owner};` +
+          ` * PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName};` +
+          ` * OwnerFirstName: ${submission.OwnerFirstName};`
+         );
+      }
+      
     } else {
-      throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination: \\r\\n' +
-           ` * TaxInvoiceTo: ${submission.TaxInvoiceTo}; \\r\\n` +
-           ` * Owner: ${submission.Owner}; \\r\\n` +
-           ` * PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName}; \\r\\n` +
+      throw Boom.badRequest('Unexpected TaxInvoiceTo and Owner V Responsible Person combination, under if (submission.TaxInvoiceTo.includes("Person responsible"):' +
+           ` * TaxInvoiceTo: ${submission.TaxInvoiceTo};` +
+           ` * Owner: ${submission.Owner};` +
+           ` * PersonResponsibleFirstName: ${submission.PersonResponsibleFirstName};` +
            ` * OwnerFirstName: ${submission.OwnerFirstName};`
           );
     }
