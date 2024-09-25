@@ -253,9 +253,9 @@ const {
     recordOfMovementAndInspection.TaxInvoicePdf = pdfBuffer.toString('base64');
   }
 
-  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason", recordOfMovementAndInspection.PaymentRouteReason)
-  if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')", recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other'))
-  if (recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')) {
+  if (recordOfMovementAndInspection.PaymentRouteReason?.toLowerCase().includes('other')) {
+    if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason", recordOfMovementAndInspection.PaymentRouteReason)
+    if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log ("recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other')", recordOfMovementAndInspection.PaymentRouteReason.toLowerCase().includes('other'))
     recordOfMovementAndInspection.PaymentRouteReason += " - " + recordOfMovementAndInspection.PaymentRouteReasonOther
   }
 
