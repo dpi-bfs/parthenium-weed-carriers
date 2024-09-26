@@ -19,6 +19,8 @@ import * as Logs from "./BfsLibrary/logs.mjs"
 
 import { primaryNswGovernmentLogo, getFormLinkAndImgQRCode, PartheniumWeedFormType } from "./templates/images.mjs"
 
+import { getPaymentDataToDatabase } from './localLibrary/getPaymentDataToDatabase.js'
+
 import Moment from 'moment-timezone';
 
 async function postToPowerAutomate(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection) {
@@ -50,44 +52,6 @@ interface Response {
   setStatusCode(code: number): void;
   setHeader(name: string, value: string): void;
   setPayload(payload: { [key: string]: any }): void;
-}
-
-function getPaymentDataToDatabase(recordOfMovementAndInspection: ProjectTypes.RecordOfMovementAndInspection, 
-                                  formSubmissionPayment, 
-                                  ToFirstName: string, 
-                                  ToLastName: string, 
-                                  ToPhone: string,
-                                  ToEmail: string | undefined,
-                                  ToBusinessName: string | undefined,
-                                  ToAbn: string | undefined
-                                  ) {
-
-  let paymentDataToDatabase!: PaymentDataToDatabase;
-
-
-  if (formSubmissionPayment) {
-    paymentDataToDatabase = {
-      PaymentAddedViaFormID: recordOfMovementAndInspection.BaseFormId,
-      PaymentAddedViaFormTrackingCode: recordOfMovementAndInspection.trackingCode,
-      TaxInvoiceToFirstName: ToFirstName,
-      TaxInvoiceToLastName: ToLastName,
-      TaxInvoiceToPhone: ToPhone,
-      TaxInvoiceToEmail: ToEmail,
-      TaxInvoiceToAbn: ToAbn,
-      TaxInvoiceToBusinessName: ToBusinessName,
-      BiosecurityCertificateFee: recordOfMovementAndInspection.BiosecurityCertificateFee,
-      SubmissionPaymentStatus: formSubmissionPayment.paymentTransaction.status,
-      SubmissionPaymentResponseCode: formSubmissionPayment.paymentTransaction.responseCode,
-      SubmissionPaymentResponseDescription: formSubmissionPayment.paymentTransaction.responseDescription,
-      SubmissionPaymentReceiptNumber: formSubmissionPayment.paymentTransaction.receiptNumber,
-      SubmissionPaymentTransactionDateTime: formSubmissionPayment.paymentTransaction.transactionTime,
-      SubmissionPaymentPrincipalAmount: formSubmissionPayment.paymentTransaction.principalAmount.amount,
-      SubmissionPaymentSurchargeAmount: formSubmissionPayment.paymentTransaction.surchargeAmount.amount,
-      SubmissionPaymentTotalAmount: formSubmissionPayment.paymentTransaction.totalAmount.amount
-    }
-  }
-
-  return paymentDataToDatabase;
 }
 
 export let post = async function webhook(req: OneBlinkHelpers.Request, res: Response) {
