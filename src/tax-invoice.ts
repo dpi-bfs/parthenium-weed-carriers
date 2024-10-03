@@ -173,7 +173,7 @@ export let post = async function webhook(req: OneBlinkHelpers.Request, res: obje
 
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionMeta:', formSubmissionMeta);
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments:', JSON.stringify(formSubmissionPayments, null, 2));
-  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('Submission Data:', submission);
+  if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('Submission Data:', JSON.stringify(submission, null, 2));
 
   if (formSubmissionPayments) {
     const pdf = await getTaxInvoicePdf(submission, formSubmissionPayments, formSubmissionMeta);
