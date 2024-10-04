@@ -38,14 +38,16 @@ export async function getTaxInvoicePdf(
 
   // This should never occur as when a user on a form's westpac payments card dialog either cancels or provides a dishonoured card,
   // the payment will cancel back to the form (although there'll be a submission event in the console)
-  if (formSubmissionPayment.status !== "SUCCEEDED" 
-    || formSubmissionPayment.paymentTransaction.responseCode !== "08" 
-    || formSubmissionPayment.paymentTransaction.responseDescription !== "Honour with identification") {
-      
-    throw Boom.badData('Payment not SUCCEEDED, 08, Honour with identification. Was '
-      + `status: ${formSubmissionPayment.status}`
-      + `formSubmissionPayment.paymentTransaction.responseCode: ${formSubmissionPayment.paymentTransaction.responseCode}`
-      + `formSubmissionPayment.paymentTransaction.responseDescription: ${formSubmissionPayment.paymentTransaction.responseDescription}`)
+  // When card good PROD returns: 00 - Approved or completed successfully; Non-PROD returns:  08 - Honour with Identification
+  // https://quickstream.westpac.com.au/docs/general/response-codes/
+  if (formSubmissionPayment.status !== "SUCCEEDED"
+    && !(formSubmissionPayment.paymentTransaction.responseCode == "00" || 
+         formSubmissionPayment.paymentTransaction.responseCode == "08")
+    ) {
+    throw Boom.badData('Payment not SUCCEEDED with response code "00" or "08". Was '
+        + `status: ${formSubmissionPayment.status}; `
+        + `formSubmissionPayment.paymentTransaction.responseCode: ${formSubmissionPayment.paymentTransaction.responseCode}; `
+        + `formSubmissionPayment.paymentTransaction.responseDescription: ${formSubmissionPayment.paymentTransaction.responseDescription}`);
   }
  
   const { ToFirstName, ToLastName,  ToBusinessName, ToAbn } = setTaxInvoiceToFields(submission)
