@@ -21,8 +21,6 @@ function getOptionsValues(data: any, formsAppEnvironmentId: number): string[] {
     console.log(`Environment with formsAppEnvironmentId ${formsAppEnvironmentId} not found.`);
     return [''];
   }
-
-
 }
 
 function findListById(formElementLists: OneBlinkTypes.FormTypes.FormElementOptionSet[], id: number) {

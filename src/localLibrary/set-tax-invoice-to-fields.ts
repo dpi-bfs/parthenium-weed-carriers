@@ -84,7 +84,9 @@ export function setTaxInvoiceToFields(submission) {
   
   if (toAbn) {
     formatAbnWithSpaces = "ABN: " + new Intl.NumberFormat('en-AU').format(toAbn.ABN.identifierValue).replace(/,/g, ' ');
-    toBusinessName = toAbn.mainName.organisationName
+
+    // In case of sole trader we will return "Business name" rather than "Trading name" given the phase out of the display of Trading Names
+    toBusinessName = toAbn.mainName?.organisationName ?? toAbn.businessName?.organisationName ?? '';
     if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`111 toBusinessName ${toBusinessName}`);
   }
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log(`222 toBusinessName ${toBusinessName}`);
