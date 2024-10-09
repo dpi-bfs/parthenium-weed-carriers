@@ -34,7 +34,9 @@ export async function getTaxInvoicePdf(
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments in generateTaxInvoice:', JSON.stringify(formSubmissionPayments, null, 2));
   if (Logs.LogLevel <= Logs.LogLevelEnum.info) console.log('formSubmissionPayments[0] in generateTaxInvoice:', JSON.stringify(formSubmissionPayments[0], null, 2));
 
-  const formSubmissionPayment = formSubmissionPayments[0]
+  // If a card is declined (e.g. with 05 - Do not honour) then a successful payment is given E.g. "08 - Honour with identification" or (in PROD "00"),
+  // Then the successful payment will be the last object in the formSubmissionPayments array.
+  const formSubmissionPayment = formSubmissionPayments[formSubmissionPayments.length - 1];
 
   // This should never occur as when a user on a form's westpac payments card dialog either cancels or provides a dishonoured card,
   // the payment will cancel back to the form (although there'll be a submission event in the console)

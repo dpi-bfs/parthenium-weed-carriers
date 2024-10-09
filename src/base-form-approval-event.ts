@@ -148,7 +148,9 @@ const {
   let ToAbn; 
 
   if (formSubmissionPayments && formSubmissionPayments[0]) {
-    formSubmissionPayment = formSubmissionPayments[0];
+    // If a card is declined (e.g. with 05 - Do not honour) then a successful payment is given E.g. "08 - Honour with identification" or (in PROD "00"),
+    // Then the successful payment will be the last object in the formSubmissionPayments array.
+    formSubmissionPayment = formSubmissionPayments[formSubmissionPayments.length - 1];
     ({ ToFirstName, ToLastName, ToPhone, ToEmail, ToBusinessName, ToAbn } = setTaxInvoiceToFields(baseFormSubmission))
   }
 
