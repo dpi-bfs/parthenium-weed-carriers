@@ -27,6 +27,7 @@ interface Personalisation {
     FormOpenInApprovalContext: boolean,
     PersonResponsibleName: string,
     PersonResponsibleEmail: string,
+    IsInspectorFillingRomHidden: string, // A hidden field that allows us to conditionally hide IsInspectorFillingRom on the form
     IsInspectorFillingRom: string,
     InspectorFillingRom: string,
     Carriers: ProjectTypes.Carrier[],
@@ -45,6 +46,7 @@ export let post = async function webhook(req: Request, res: object) {
       FormOpenInApprovalContext: false,
       PersonResponsibleName: "",
       PersonResponsibleEmail: "",
+      IsInspectorFillingRomHidden: "",
       IsInspectorFillingRom: "",
       InspectorFillingRom: "",      
       Carriers: [],
@@ -78,6 +80,7 @@ export let post = async function webhook(req: Request, res: object) {
         FormOpenInApprovalContext: true,
         PersonResponsibleName: baseFormSubmission.PersonResponsibleFirstName + " " + baseFormSubmission.PersonResponsibleLastName,
         PersonResponsibleEmail:  baseFormSubmission.PersonResponsibleEmail,
+        IsInspectorFillingRomHidden: baseFormSubmission.IsInspectorFillingRom,
         IsInspectorFillingRom: baseFormSubmission.IsInspectorFillingRom,
         InspectorFillingRom: baseFormSubmission.InspectorFillingRom,        
         Carriers: baseFormSubmission.Carriers,
