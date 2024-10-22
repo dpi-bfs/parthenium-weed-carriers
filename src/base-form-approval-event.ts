@@ -178,7 +178,8 @@ const {
 
 
   switch (recordOfMovementAndInspection.PaymentRoute){
-    case 'Pay now by card - user filled ROM' || undefined:
+    case 'Pay now by card - user filled ROM':
+    case undefined:
       // PaymentRoute is undefined as as user forced to pay at ROM stage; without PaymentRoute being shown on the form
       if (recordOfMovementAndInspection.IsInspectorFillingRom === "Yes") {
         throw Boom.badData("Assertion failure. Expected recordOfMovementAndInspection.IsInspectorFillingRom to be no but was yes.: " + recordOfMovementAndInspection.IsInspectorFillingRom)
