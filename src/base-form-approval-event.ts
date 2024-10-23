@@ -181,9 +181,11 @@ const {
     case 'Pay now by card - user filled ROM':
     case undefined:
       // PaymentRoute is undefined as as user forced to pay at ROM stage; without PaymentRoute being shown on the form
+      
       if (recordOfMovementAndInspection.IsInspectorFillingRom === "Yes") {
         throw Boom.badData("Assertion failure. Expected recordOfMovementAndInspection.IsInspectorFillingRom to be 'No' but was 'Yes': " + recordOfMovementAndInspection.IsInspectorFillingRom)
       }
+
       // paymentAfterBorderCrossingTextWithHtml = paymentDoneTextWithHtml
 
       recordOfMovementAndInspection.PaymentRoute = 'Pay now by card - user filled ROM'
