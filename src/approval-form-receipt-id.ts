@@ -18,7 +18,8 @@ interface Request {
     draftId: string | null,
     preFillFormDataId: string | null,
     jobId: string | null,
-    previousFormSubmissionApprovalId: string | null
+    previousFormSubmissionApprovalId: string | null,
+    submission: any
   }
 }
 
@@ -28,13 +29,18 @@ interface Response {
   setPayload(payload: { [key: string]: any }): void;
 }
 
-// Makes it so the approval form shares the same externalID as the base form.
-// In the OneBlink Console > Submissions, the "External Id" will appear for both forms.
-//
-// On approval submission this fires twice. 
-// Once when previousFormSubmissionApprovalId has a value;
-// Then when externalIdUrlSearchParam has a value;
-// So we have to handle both cases
+/* 
+Makes it so the approval form shares the same externalID as the base form.
+In the OneBlink Console > Submissions, the "External Id" will appear for both forms.
+
+On approval submission this fires twice. 
+Once when previousFormSubmissionApprovalId has a value;
+Then when externalIdUrlSearchParam has a value;
+So we have to handle both cases.
+
+Then sometime after 2024-10-30 10:15 these were both null. So have to hunt for 
+req.body.submission.trackingCodeApprovalCopy
+*/
 export let post = async function webhook(req: Request, res: Response) {
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("approval-form-receipt-id start");
   if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("Validating webhook request payload");
@@ -46,7 +52,7 @@ export let post = async function webhook(req: Request, res: Response) {
 
     let baseFormExternalId;
 
-    if(req.body.previousFormSubmissionApprovalId) {
+    if (req.body.previousFormSubmissionApprovalId) {
       const formSubmissionApproval =
       await approvalsSDK.getFormSubmissionApproval(
         req.body.previousFormSubmissionApprovalId
@@ -55,12 +61,16 @@ export let post = async function webhook(req: Request, res: Response) {
       if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("formSubmissionApproval", formSubmissionApproval)
       baseFormExternalId = formSubmissionApproval.formSubmissionMeta.externalId
       
-    } else if(req.body.externalIdUrlSearchParam){
+    } else if (req.body.externalIdUrlSearchParam){
 
       baseFormExternalId = req.body.externalIdUrlSearchParam
 
+    } else if (req.body.submission.trackingCodeApprovalCopy)  {
+
+      baseFormExternalId = req.body.submission.trackingCodeApprovalCopy
+
     } else {
-      throw Boom.badData("res not set", res);
+      throw Boom.badData("res, the response, not set as couldn't find a way to set baseFormExternalId", res);
     }  
 
     if (Logs.LogLevel <= Logs.LogLevelEnum.error) console.log("baseFormExternalId", baseFormExternalId);  
